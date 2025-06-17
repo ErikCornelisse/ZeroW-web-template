@@ -50,7 +50,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     // Initialize app configuration
-    loadAppConfig();
+    loadAppConfig().then(() => {
+        // Fetch data after config is loaded
+        fetchData();
+    });
 
     const categoryIcons = {
         "primary production": "eco",
@@ -131,7 +134,9 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- Data Fetching and Rendering ---
     async function fetchData() {
         try {
-            const response = await fetch('chorizo_activities.json');
+            // Use data file from app config, fallback to data.json
+            const dataFile = appConfig.app && appConfig.app.data ? appConfig.app.data : 'data.json';
+            const response = await fetch(dataFile);
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
@@ -333,9 +338,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Initial FAB setup
     updateFab(); 
-
-    // Initial data fetch
-    fetchData();
 
     // --- Info Card Animation Logic ---
     // Note: Animation logic removed since info cards are hidden on small screens
