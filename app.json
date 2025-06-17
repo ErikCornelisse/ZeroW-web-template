@@ -1,0 +1,75 @@
+{
+  "app": {
+    "favicon": "images/logos/project-logo-48.png",
+    "project_logo": "images/logos/project-logo-48.png",
+    "application_name": "Actions Explorer",
+    "data": "data.json"
+  },
+  "modals": {
+    "about": {
+      "state": "closed",
+      "icon": "info",
+      "header": "About This Application",
+      "content": "This application demonstrates how information can be found and shared in an easy and controlled way by making use of standardized protocols for a data space.",
+      "footer": "Built with modern web technologies for data exploration."
+    },
+    "help": {
+      "state": "closed",
+      "icon": "help",
+      "header": "How to Use",
+      "content": "Navigate through the categories to explore different actions. Click on any item to view detailed information.",
+      "footer": "Need more help? Contact support."
+    },
+    "settings": {
+      "state": "closed",
+      "icon": "settings",
+      "header": "Application Settings",
+      "content": "Customize your experience with the available settings and preferences.",
+      "footer": "Changes are automatically saved."
+    },
+    "splash": {
+      "state": "open",
+      "icon": "stars",
+      "header": "Welcome to Actions Explorer",
+      "content": "Discover and explore various actions and activities. This application provides an intuitive interface to browse through categorized information and find relevant details.",
+      "footer": "Click Continue to start exploring."
+    },
+    "home": {
+      "state": "closed",
+      "icon": "home",
+      "header": "Return Home",
+      "content": "Return to the main navigation area to explore different categories and access the primary features of the application.",
+      "footer": "Navigate back to the home view."
+    }
+  },
+  "pages": {
+    "home": {
+      "header": {
+        "visible": true,
+        "fixed": false,
+        "icon": "images/logos/project-logo-48.png",
+        "title": "Actions Explorer",
+        "modal": "about"
+      },
+      "content": {},
+      "footer": {}
+    }
+  },
+  "info": {
+    "card1": {
+      "header": "Demo Application",
+      "content": "View the Food Loss and Waste reduction activities collected by the project by clicking on one of the categories below. Click on the logo for more information. Use the Home button below to return to the Data Space. This application demonstrates how information can be found and shared in an easy and controlled way by making use of standardized protocols for a data space.",
+      "footer": ""
+    },
+    "card2": {
+      "header": "Project Information",
+      "content": "This project is co-funded by Horizon Europe programme that aims to improve the understanding between social norms, consumer behaviours and economic actor decisions and waste generation. The project's main goal is to address existing research gaps and will use its outcomes to deliver and advance innovations helping actors to engage more effectively in waste prevention and reduction activities.",
+      "footer": ""
+    },
+    "card3": {
+      "header": "Visual Overview",
+      "content": "images/project-diagram.jpg",
+      "footer": "Project ecosystem diagram"
+    }
+  }
+}

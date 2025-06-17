@@ -18,6 +18,39 @@ document.addEventListener('DOMContentLoaded', () => {
     // const closeZerowModal = document.getElementById('close-zerow-modal');
 
     let allData = {};
+    let appConfig = {};
+
+    // Load app configuration
+    async function loadAppConfig() {
+        try {
+            const response = await fetch('app.json');
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            appConfig = await response.json();
+            
+            // Apply configuration to the page
+            if (appConfig.pages && appConfig.pages.home && appConfig.pages.home.header) {
+                const headerConfig = appConfig.pages.home.header;
+                
+                // Update title if specified
+                if (headerConfig.title && appTitle) {
+                    appTitle.textContent = headerConfig.title;
+                }
+                
+                // Update icon if specified
+                if (headerConfig.icon && logo) {
+                    logo.src = headerConfig.icon;
+                }
+            }
+        } catch (error) {
+            console.error("Could not fetch or parse app config:", error);
+            // Continue with default values if config fails to load
+        }
+    }
+
+    // Initialize app configuration
+    loadAppConfig();
 
     const categoryIcons = {
         "primary production": "eco",
