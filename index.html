@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chorizo Actions Explorer</title>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#B85C47">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="ChorizoApp">
+    <link rel="apple-touch-icon" href="images/logos/data.chorizoproject.eu_favicon.png"> <!-- Consider creating a dedicated apple-touch-icon -->
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <div class="header-left"> <!-- New div for logo and title -->
+                <img src="./images/logos/data.chorizoproject.eu_favicon.png" alt="Chorizo Project Logo" id="logo" class="logo">
+                <h1 id="app-title">CHORIZO Actions Explorer</h1>
+            </div>
+            <!-- <button id="zerow-data-space-button" class="header-button zerow-favicon-button">
+                <img src="./images/logos/www.zerow-project.eu_favicon.png" alt="ZeroW Data Space" class="button-favicon">
+            </button> -->
+        </div>
+    </header>
+
+    <section id="info-cards-section">
+        <div class="info-cards-container">
+            <div class="info-card">
+                <h4>ZeroW demo application</h4>
+                <p>View the Food Loss and Waste reduction activities collected by the Chorizo Project by clicking on one of the categories below.<br><br>Click on the Chorizo logo for more information. Use the Home button below to return to the ZeroW Data Space.<br><br>This application demonstrates how information can be found and shared in an easy and controlled way by making use of standardized protocols for a data space. The CHORIZO project is a sister project of the ZeroW project with the same mission but complementary goals.</p>
+            </div>
+            <div class="info-card">
+                <h4>The CHORIZO project</h4>
+                <p>CHORIZO is a project co-funded by Horizon Europe programme that aims to improve the understanding between social norms, consumer behaviours and economic actor decisions and FLW generation and use this knowledge to improve the effectiveness of decision-making and engagement of food chain actors, towards zero food waste.<br><br>The project´s main goal is to address existing research gaps and will use its outcomes to deliver and advance innovations helping actors to engage more effectively in food waste prevention and reduction activities.</p>
+            </div>
+            <div class="info-card">
+                <img src="images/Chorizo_birdsnest.jpg" alt="Chorizo Birdsnest diagram">
+            </div>
+        </div>
+    </section>
+
+    <main>
+        <section id="category-view">
+            <h2>Categories</h2>
+            <div id="category-cards-container" class="cards-container">
+                <!-- Category cards will be injected here by JavaScript -->
+            </div>
+        </section>
+
+        <section id="activity-view" class="hidden">
+            
+            <h2 id="activity-view-title">Category Activities</h2>
+            <div id="activity-cards-container" class="cards-container">
+                <!-- Activity cards will be injected here by JavaScript -->
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>© 2025 Part of the <a href="https://www.zerow-project.eu/" target="_blank">ZeroW Data Space</a> demo.</p>
+        <p>Tackling food loss and waste through innovation.</p>
+        <img src="images/logos/ZeroW og EU logo 50 pct. white.png" alt="ZeroW and EU logo" style="margin-top: 10px; height: 50px;">
+    </footer>
+
+    <!-- Chorizo Modal -->
+    <div id="chorizo-modal" class="modal">
+        <div class="modal-content">
+            <img src="./images/logos/data.chorizoproject.eu_favicon.png" alt="Chorizo Project Logo" class="modal-logo"> <!-- Added logo here -->
+            <!-- <span class="close-button" id="close-chorizo-modal">&times;</span> -->
+            <h2>About the Chorizo project</h2>
+            <p>The Chorizo Project Food Loss and Waste (FLW) Datahub and “Insighter” serves as a central platform for storing and sharing a wide range of datasets and insights on food loss and waste (FLW) across the EU. This hub features an evidence-based analysis on both previous and ongoing FLW initiatives across the EU, alongside new research on social norms and behaviours. These insights were gathered from several case studies conducted as part of the CHORIZO project, which examined the actions of consumers, businesses, and charities (e.g. food banks) in relation to FLW. Users can access and download datasets upon registration.</p>
+            <a href="https://data.chorizoproject.eu/" target="_blank">Visit Chorizo Project Datahub</a>
+        </div>
+    </div>
+
+    <!-- ZeroW Modal -->
+    <div id="zerow-modal" class="modal">
+        <div class="modal-content">
+            <img src="./images/logos/www.zerow-project.eu_favicon.png" alt="ZeroW Project Logo" class="modal-logo"> <!-- Added logo here -->
+            <!-- <span class="close-button" id="close-zerow-modal">&times;</span> -->
+            <h2>About ZeroW</h2>
+            <p>ZeroW addresses the need to move from today's fragmented solutions targeted on isolated food loss and waste (FLW) problems to synergised solutions based on shared data, knowledge, and collective intelligence - breaking siloed solutions and 'opening' closed ecosystems. This is done by creating a 0FLW dataspace. The ZeroW Dataspace is a comprehensive solution for secure data management, enabling seamless integration and collaboration across various platforms.</p>
+            <a href="https://www.zerow-project.eu/data-spaces" target="_blank">Learn more about ZeroW Data Spaces</a>
+        </div>
+    </div>
+
+    <!-- Home FAB Modal -->
+    <div id="home-fab-modal" class="modal">
+        <div class="modal-content">
+            <img src="./images/logos/www.zerow-project.eu_favicon.png" alt="ZeroW Project Logo" class="modal-logo">
+            <h2>Return to base</h2>
+            <p>You are about to leave the Chorizo Actions Explorer. Click the link below to go to the ZeroW Data Space where other demo applications can be explored. Click the button in in the bottom right corner to stay in the current application.</p>
+            <a href="https://www.zerow-project.eu/data-spaces" target="_blank" class="button">Goto ZeroW Data Space</a>
+        </div>
+    </div>
+
+    <!-- Splash Modal -->
+    <div id="splash-modal" class="modal splash-modal">
+        <div class="modal-content splash-content">
+            <div class="splash-section">
+                <p class="splash-text">Access the Chorizo Data Hub via the ZeroW Data Space</p>
+            </div>
+            <div class="splash-section">
+                <div class="splash-icons">
+                    <div class="splash-connecting-line"></div>
+                    <div class="splash-icon splash-icon-logo splash-icon-cubic">
+                        <img src="images/logos/data.chorizoproject.eu_favicon.png" alt="Chorizo Project Logo">
+                    </div>
+                    <div class="splash-icon splash-icon-logo splash-icon-hexagon">
+                        <img src="images/logos/www.zerow-project.eu_favicon.png" alt="ZeroW Project Logo">
+                    </div>
+                    <span class="material-icons-outlined splash-icon splash-icon-reduced-radius">eco</span>
+                </div>
+            </div>
+            <div class="splash-section">
+                <p class="splash-text">Select a category to see related activities to reduce Food Loss and Waste</p>
+            </div>
+            <button id="splash-continue" class="splash-button">Continue</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+    <button id="fab" class="fab material-icons-outlined">home</button> <!-- FAB Added here -->
+</body>
+</html>
