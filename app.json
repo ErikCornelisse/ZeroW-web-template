@@ -17,7 +17,7 @@
       "state": "modal-about",
       "icon": "images/logos/project-logo-48.png",
       "title": "About This Application",
-      "content": "This application demonstrates how information can be found and shared in an easy and controlled way by making use of standardized proce.",
+      "content": "This application demonstrates how information can be found and shared in an easy and controlled way by making use of standardized process.",
       "footer": "<a href=\"https://data.chorizoproject.eu/\" target=\"_blank\">Visit Chorizo Project Datahub</a>"
     },
     "help": {

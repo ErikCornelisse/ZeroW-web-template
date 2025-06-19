@@ -43,9 +43,62 @@ document.addEventListener('DOMContentLoaded', () => {
                     logo.src = headerConfig.icon;
                 }
             }
+
+            // Apply about modal configuration
+            if (appConfig.modals && appConfig.modals.about) {
+                updateAboutModal(appConfig.modals.about);
+            }
         } catch (error) {
             console.error("Could not fetch or parse app config:", error);
             // Continue with default values if config fails to load
+        }
+    }
+
+    // Function to update about modal content dynamically
+    function updateAboutModal(aboutConfig) {
+        const aboutModal = document.getElementById('about-modal');
+        if (!aboutModal) return;
+
+        const modalContent = aboutModal.querySelector('.modal-content');
+        if (!modalContent) return;
+
+        // Update modal logo if specified
+        const modalLogo = modalContent.querySelector('.modal-logo');
+        if (modalLogo && aboutConfig.icon) {
+            modalLogo.src = aboutConfig.icon;
+            modalLogo.alt = aboutConfig.title || 'Project Logo';
+        }
+
+        // Update modal title
+        const modalTitle = modalContent.querySelector('h2');
+        if (modalTitle && aboutConfig.title) {
+            modalTitle.textContent = aboutConfig.title;
+        }
+
+        // Update modal content
+        const modalText = modalContent.querySelector('p');
+        if (modalText && aboutConfig.content) {
+            modalText.textContent = aboutConfig.content;
+        }
+
+        // Update modal footer link
+        const modalLink = modalContent.querySelector('a');
+        if (modalLink && aboutConfig.footer) {
+            // Check if footer contains HTML (like a link)
+            if (aboutConfig.footer.includes('<a')) {
+                // Parse HTML content
+                const tempDiv = document.createElement('div');
+                tempDiv.innerHTML = aboutConfig.footer;
+                const linkElement = tempDiv.querySelector('a');
+                if (linkElement) {
+                    modalLink.href = linkElement.href;
+                    modalLink.textContent = linkElement.textContent;
+                    modalLink.target = linkElement.target || '_blank';
+                }
+            } else {
+                // Plain text footer
+                modalLink.textContent = aboutConfig.footer;
+            }
         }
     }
 
