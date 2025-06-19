@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const activityViewTitle = document.getElementById('activity-view-title');
     const infoCardsSection = document.getElementById('info-cards-section'); // Added this line
 
-    const chorizoModal = document.getElementById('chorizo-modal');
+    const chorizoModal = document.getElementById('about-modal');
     const zerowModal = document.getElementById('zerow-modal');
     const homeFabModal = document.getElementById('home-fab-modal');
     const splashModal = document.getElementById('splash-modal');
@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const logo = document.getElementById('logo');
     const appTitle = document.getElementById('app-title');
     // const zerowDataSpaceButton = document.getElementById('zerow-data-space-button');
-    // const closeChorizoModal = document.getElementById('close-chorizo-modal');
+    // const closeChorizoModal = document.getElementById('close-about-modal');
     // const closeZerowModal = document.getElementById('close-zerow-modal');
 
     let allData = {};
