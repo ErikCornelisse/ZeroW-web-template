@@ -44,14 +44,20 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
 
-            // Apply about modal configuration
-            if (appConfig.modals && appConfig.modals.about) {
-                updateAboutModal(appConfig.modals.about);
-            }
+            // Apply modal configurations dynamically
+            if (appConfig.modals) {
+                // Define modal mappings (config name → HTML element ID)
+                const modalMappings = {
+                    'about': 'about-modal',
+                    'home': 'home-fab-modal'
+                };
 
-            // Apply home modal configuration
-            if (appConfig.modals && appConfig.modals.home) {
-                updateHomeModal(appConfig.modals.home);
+                // Apply configuration for each mapped modal
+                Object.keys(modalMappings).forEach(modalName => {
+                    if (appConfig.modals[modalName]) {
+                        updateModal(modalName, appConfig.modals[modalName], modalMappings[modalName]);
+                    }
+                });
             }
         } catch (error) {
             console.error("Could not fetch or parse app config:", error);
@@ -59,106 +65,81 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Function to update about modal content dynamically
-    function updateAboutModal(aboutConfig) {
-        const aboutModal = document.getElementById('about-modal');
-        if (!aboutModal) return;
-
-        const modalContent = aboutModal.querySelector('.modal-content');
-        if (!modalContent) return;
-
-        // Update modal logo if specified
-        const modalLogo = modalContent.querySelector('.modal-logo');
-        if (modalLogo && aboutConfig.icon) {
-            modalLogo.src = aboutConfig.icon;
-            modalLogo.alt = aboutConfig.title || 'Project Logo';
+    // Generic function to update modal content dynamically
+    function updateModal(modalName, modalConfig, modalElementId) {
+        const modal = document.getElementById(modalElementId);
+        if (!modal) {
+            console.warn(`Modal element with ID '${modalElementId}' not found for modal '${modalName}'`);
+            return;
         }
 
-        // Update modal title
+        const modalContent = modal.querySelector('.modal-content');
+        if (!modalContent) {
+            console.warn(`Modal content not found in modal '${modalName}'`);
+            return;
+        }
+
+        // Update modal logo/icon if specified
+        const modalLogo = modalContent.querySelector('.modal-logo');
+        if (modalLogo && modalConfig.icon) {
+            // Check if icon is a URL/path (contains '/' or '.') or Material Icon name
+            if (modalConfig.icon.includes('/') || modalConfig.icon.includes('.')) {
+                // It's an image path
+                modalLogo.src = modalConfig.icon;
+                modalLogo.alt = getModalTitle(modalConfig) || `${modalName} Logo`;
+            } else {
+                // It's a Material Icon name - could be handled differently if needed
+                // For now, we'll keep the existing image but update alt text
+                modalLogo.alt = getModalTitle(modalConfig) || `${modalName} Icon`;
+            }
+        }
+
+        // Update modal title (flexible field handling)
         const modalTitle = modalContent.querySelector('h2');
-        if (modalTitle && aboutConfig.title) {
-            modalTitle.textContent = aboutConfig.title;
+        if (modalTitle) {
+            const titleText = getModalTitle(modalConfig);
+            if (titleText) {
+                modalTitle.textContent = titleText;
+            }
         }
 
         // Update modal content
         const modalText = modalContent.querySelector('p');
-        if (modalText && aboutConfig.content) {
-            modalText.textContent = aboutConfig.content;
+        if (modalText && modalConfig.content) {
+            modalText.textContent = modalConfig.content;
         }
 
         // Update modal footer link
         const modalLink = modalContent.querySelector('a');
-        if (modalLink && aboutConfig.footer) {
-            // Check if footer contains HTML (like a link)
-            if (aboutConfig.footer.includes('<a')) {
-                // Parse HTML content
-                const tempDiv = document.createElement('div');
-                tempDiv.innerHTML = aboutConfig.footer;
-                const linkElement = tempDiv.querySelector('a');
-                if (linkElement) {
-                    modalLink.href = linkElement.href;
-                    modalLink.textContent = linkElement.textContent;
-                    modalLink.target = linkElement.target || '_blank';
-                }
-            } else {
-                // Plain text footer
-                modalLink.textContent = aboutConfig.footer;
-            }
+        if (modalLink && modalConfig.footer) {
+            updateModalFooter(modalLink, modalConfig.footer);
         }
     }
 
-    // Function to update home modal content dynamically
-    function updateHomeModal(homeConfig) {
-        const homeModal = document.getElementById('home-fab-modal');
-        if (!homeModal) return;
+    // Helper function to get modal title from various possible fields
+    function getModalTitle(modalConfig) {
+        return modalConfig.title || modalConfig.header || null;
+    }
 
-        const modalContent = homeModal.querySelector('.modal-content');
-        if (!modalContent) return;
-
-        // Update modal logo if specified
-        const modalLogo = modalContent.querySelector('.modal-logo');
-        if (modalLogo && homeConfig.icon) {
-            // Check if icon is a URL/path or Material Icon name
-            if (homeConfig.icon.includes('/') || homeConfig.icon.includes('.')) {
-                modalLogo.src = homeConfig.icon;
-                modalLogo.alt = homeConfig.header || homeConfig.title || 'Home Logo';
-            }
-        }
-
-        // Update modal title (use header if available, fallback to title)
-        const modalTitle = modalContent.querySelector('h2');
-        if (modalTitle && (homeConfig.header || homeConfig.title)) {
-            modalTitle.textContent = homeConfig.header || homeConfig.title;
-        }
-
-        // Update modal content
-        const modalText = modalContent.querySelector('p');
-        if (modalText && homeConfig.content) {
-            modalText.textContent = homeConfig.content;
-        }
-
-        // Update modal footer link
-        const modalLink = modalContent.querySelector('a');
-        if (modalLink && homeConfig.footer) {
-            // Check if footer contains HTML (like a link)
-            if (homeConfig.footer.includes('<a')) {
-                // Parse HTML content
-                const tempDiv = document.createElement('div');
-                tempDiv.innerHTML = homeConfig.footer;
-                const linkElement = tempDiv.querySelector('a');
-                if (linkElement) {
-                    modalLink.href = linkElement.href;
-                    modalLink.textContent = linkElement.textContent;
-                    modalLink.target = linkElement.target || '_blank';
-                    // Copy CSS classes if specified
-                    if (linkElement.className) {
-                        modalLink.className = linkElement.className;
-                    }
+    // Helper function to update modal footer (handles both HTML and plain text)
+    function updateModalFooter(modalLink, footerContent) {
+        if (footerContent.includes('<a')) {
+            // Parse HTML content
+            const tempDiv = document.createElement('div');
+            tempDiv.innerHTML = footerContent;
+            const linkElement = tempDiv.querySelector('a');
+            if (linkElement) {
+                modalLink.href = linkElement.href;
+                modalLink.textContent = linkElement.textContent;
+                modalLink.target = linkElement.target || '_blank';
+                // Copy CSS classes if specified
+                if (linkElement.className) {
+                    modalLink.className = linkElement.className;
                 }
-            } else {
-                // Plain text footer
-                modalLink.textContent = homeConfig.footer;
             }
+        } else {
+            // Plain text footer
+            modalLink.textContent = footerContent;
         }
     }
 
