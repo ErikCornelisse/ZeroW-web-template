@@ -14,10 +14,10 @@
   },
   "modals": {
     "home": {
-      "state": "closed",
-      "icon": "home",
-      "header": "Return to Base",
-      "content": "U are about to leave this application. Click the link below to to the ZeroW Data Space where other demo applications can be explored. Click the button in the bottom right corner to stay in the current application.",
+      "state": "modal-home",
+      "icon": "images/logos/www.zerow-project.eu_favicon.png",
+      "header": "Return to base",
+      "content": "You are about to leave this application. Click the link below to to the ZeroW Data Space where other demo applications can be explored. Click the button in the bottom right corner to stay in the current application.",
       "footer": "<a href=\"https://www.zerow-project.eu/data-spaces\" target=\"_blank\" class=\"button\">Goto ZeroW Data Space</a>"
     },
     "about": {

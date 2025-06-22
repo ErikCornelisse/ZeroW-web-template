@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const chorizoModal = document.getElementById('about-modal');
     const zerowModal = document.getElementById('zerow-modal');
-    const homeFabModal = document.getElementById('home-fab-modal');
+    const homeModal = document.getElementById('home-modal');
     const splashModal = document.getElementById('splash-modal');
     const splashContinueButton = document.getElementById('splash-continue');
     const logo = document.getElementById('logo');
@@ -46,17 +46,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Apply modal configurations dynamically
             if (appConfig.modals) {
-                // Define modal mappings (config name → HTML element ID)
-                const modalMappings = {
-                    'about': 'about-modal',
-                    'home': 'home-fab-modal'
-                };
-
-                // Apply configuration for each mapped modal
-                Object.keys(modalMappings).forEach(modalName => {
-                    if (appConfig.modals[modalName]) {
-                        updateModal(modalName, appConfig.modals[modalName], modalMappings[modalName]);
-                    }
+                // Apply configuration for each modal using consistent naming pattern
+                Object.keys(appConfig.modals).forEach(modalName => {
+                    // Convert modal name to element ID using consistent pattern: modalName + '-modal'
+                    const modalElementId = `${modalName}-modal`;
+                    updateModal(modalName, appConfig.modals[modalName], modalElementId);
                 });
             }
         } catch (error) {
@@ -212,8 +206,8 @@ document.addEventListener('DOMContentLoaded', () => {
             zerowModal.style.display = 'none';
             modalWasClosed = true;
         }
-        if (event.target === homeFabModal) {
-            homeFabModal.style.display = 'none';
+        if (event.target === homeModal) {
+            homeModal.style.display = 'none';
             modalWasClosed = true;
         }
         if (event.target === splashModal) {
@@ -400,14 +394,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     fab.addEventListener('click', () => {
         if (fabState === 'home') {
-            homeFabModal.style.display = 'block';
+            homeModal.style.display = 'block';
             setFabState('modal');
         } else if (fabState === 'category') {
             showCategoryView(); // This will also set FAB state to home via its own call to setFabState
         } else if (fabState === 'modal') { // Changed from 'info'
             chorizoModal.style.display = 'none';
             zerowModal.style.display = 'none';
-            homeFabModal.style.display = 'none';
+            homeModal.style.display = 'none';
             setFabState(fabPreviousState); // Revert to previous state
         } else {
             // Fallback for other states, if any are defined with actions
