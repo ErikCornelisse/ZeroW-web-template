@@ -48,6 +48,11 @@ document.addEventListener('DOMContentLoaded', () => {
             if (appConfig.modals && appConfig.modals.about) {
                 updateAboutModal(appConfig.modals.about);
             }
+
+            // Apply home modal configuration
+            if (appConfig.modals && appConfig.modals.home) {
+                updateHomeModal(appConfig.modals.home);
+            }
         } catch (error) {
             console.error("Could not fetch or parse app config:", error);
             // Continue with default values if config fails to load
@@ -98,6 +103,61 @@ document.addEventListener('DOMContentLoaded', () => {
             } else {
                 // Plain text footer
                 modalLink.textContent = aboutConfig.footer;
+            }
+        }
+    }
+
+    // Function to update home modal content dynamically
+    function updateHomeModal(homeConfig) {
+        const homeModal = document.getElementById('home-fab-modal');
+        if (!homeModal) return;
+
+        const modalContent = homeModal.querySelector('.modal-content');
+        if (!modalContent) return;
+
+        // Update modal logo if specified
+        const modalLogo = modalContent.querySelector('.modal-logo');
+        if (modalLogo && homeConfig.icon) {
+            // Check if icon is a URL/path or Material Icon name
+            if (homeConfig.icon.includes('/') || homeConfig.icon.includes('.')) {
+                modalLogo.src = homeConfig.icon;
+                modalLogo.alt = homeConfig.header || homeConfig.title || 'Home Logo';
+            }
+        }
+
+        // Update modal title (use header if available, fallback to title)
+        const modalTitle = modalContent.querySelector('h2');
+        if (modalTitle && (homeConfig.header || homeConfig.title)) {
+            modalTitle.textContent = homeConfig.header || homeConfig.title;
+        }
+
+        // Update modal content
+        const modalText = modalContent.querySelector('p');
+        if (modalText && homeConfig.content) {
+            modalText.textContent = homeConfig.content;
+        }
+
+        // Update modal footer link
+        const modalLink = modalContent.querySelector('a');
+        if (modalLink && homeConfig.footer) {
+            // Check if footer contains HTML (like a link)
+            if (homeConfig.footer.includes('<a')) {
+                // Parse HTML content
+                const tempDiv = document.createElement('div');
+                tempDiv.innerHTML = homeConfig.footer;
+                const linkElement = tempDiv.querySelector('a');
+                if (linkElement) {
+                    modalLink.href = linkElement.href;
+                    modalLink.textContent = linkElement.textContent;
+                    modalLink.target = linkElement.target || '_blank';
+                    // Copy CSS classes if specified
+                    if (linkElement.className) {
+                        modalLink.className = linkElement.className;
+                    }
+                }
+            } else {
+                // Plain text footer
+                modalLink.textContent = homeConfig.footer;
             }
         }
     }
@@ -343,7 +403,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const fabIcons = {
         'home': 'home',
         'category': 'chevron_left',
-        'modal': 'close' // Renamed from 'info', removed original 'close'
+        'modal': 'close'
     };
 
     const fabActions = { // Actions are mostly for debugging, core logic is in event listeners

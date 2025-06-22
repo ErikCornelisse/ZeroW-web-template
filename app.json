@@ -13,6 +13,13 @@
     "prologue": "Click Continue to start exploring."
   },
   "modals": {
+    "home": {
+      "state": "closed",
+      "icon": "home",
+      "header": "Return to Base",
+      "content": "U are about to leave this application. Click the link below to to the ZeroW Data Space where other demo applications can be explored. Click the button in the bottom right corner to stay in the current application.",
+      "footer": "<a href=\"https://www.zerow-project.eu/data-spaces\" target=\"_blank\" class=\"button\">Goto ZeroW Data Space</a>"
+    },
     "about": {
       "state": "modal-about",
       "icon": "images/logos/project-logo-48.png",
@@ -33,13 +40,6 @@
       "title": "Application Settings",
       "content": "Customize your experience with the available settings and preferences.",
       "footer": "Changes are automatically saved."
-    },
-    "home": {
-      "state": "closed",
-      "icon": "home",
-      "header": "Return Home",
-      "content": "Return to the main navigation area to explore different categories and access the primary features of the application.",
-      "footer": "Navigate back to the home view."
     }
   },
   "pages": {
