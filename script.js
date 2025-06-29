@@ -162,6 +162,111 @@ document.addEventListener('DOMContentLoaded', () => {
         return str.charAt(0).toUpperCase() + str.slice(1);
     }
 
+    // --- Reusable Card Creation Functions ---
+    
+    // Generic function to create a card element with common styling
+    function createCard(className, content) {
+        const card = document.createElement('div');
+        card.className = className;
+        if (typeof content === 'string') {
+            card.innerHTML = content;
+        }
+        return card;
+    }
+
+    // Generic function to clear container and handle empty states
+    function clearContainer(container, emptyMessage) {
+        container.innerHTML = '';
+        return {
+            showEmpty: () => {
+                container.innerHTML = `<p>${emptyMessage}</p>`;
+            }
+        };
+    }
+
+    // Create a tag element for activity cards
+    function createTag(text, additionalClasses = '') {
+        return `<span class="inline-block bg-tag text-tag px-3 py-1 rounded-full text-xs ${additionalClasses}">${text}</span>`;
+    }
+
+    // Create header with icon for cards
+    function createCardHeader(iconHtml, title, headerClasses = 'flex items-center mb-3') {
+        return `<div class="${headerClasses}">${iconHtml}<h4 class="text-lg font-medium text-gray-text-dark m-0">${title}</h4></div>`;
+    }
+
+    // Create source link or text display
+    function createSourceDisplay(source) {
+        if (!source) {
+            return '<p class="text-xs text-primary-teal break-all">N/A</p>';
+        }
+        
+        if (source.startsWith('http') || source.startsWith('www')) {
+            const displayUrl = source.length > 100 ? source.substring(0, 97) + '...' : source;
+            return `<div><a href="${source}" target="_blank" class="text-xs text-primary-teal break-all no-underline font-normal hover:underline hover:text-primary-teal-dark">${displayUrl}</a></div>`;
+        } else {
+            return `<p class="text-xs text-primary-teal break-all">${source}</p>`;
+        }
+    }
+
+    // Generic function to create category cards
+    function createCategoryCard(categoryName, activities) {
+        const iconName = categoryIcons[categoryName.toLowerCase()] || categoryIcons["whole supply chain"];
+        const capitalizedCategoryName = capitalizeFirstWord(categoryName);
+        const description = getCategoryDescription(categoryName);
+        
+        const cardContent = `
+            <h3 class="mt-0 flex items-center text-xl font-semibold">
+                <span class="material-icons-outlined mr-2 text-2xl">${iconName}</span> 
+                ${capitalizedCategoryName}
+            </h3>
+            <p class="text-sm text-primary-teal-light mb-2">${activities.length} activities</p>
+            <p class="text-base text-primary-teal leading-relaxed">${description}</p>
+        `;
+        
+        const card = createCard(
+            'bg-gray-card border border-gray-border border-l-4 border-l-accent-red rounded-lg p-6 sm:p-4 shadow-light cursor-pointer transition-all duration-200 hover:-translate-y-1 hover:shadow-hover',
+            cardContent
+        );
+        
+        card.addEventListener('click', () => showActivityView(categoryName, activities));
+        return card;
+    }
+
+    // Generic function to create activity cards
+    function createActivityCard(activity) {
+        if (Object.keys(activity).length === 0) return null;
+
+        const title = activity.action || 'N/A';
+        const capitalizedTitle = capitalizeFirstWord(title);
+        const goals = activity['goals/objectives'] || 'No description available.';
+        
+        // Create header icon
+        let headerIcon = '';
+        if (activity.favicon && activity.favicon.startsWith('images/logos/')) {
+            headerIcon = `<img src="${activity.favicon}" alt="Favicon" class="w-5 h-5 mr-2 object-contain">`;
+        }
+        
+        // Create tags
+        const tags = [];
+        if (activity.duration) tags.push(createTag(activity.duration));
+        if (activity.country) tags.push(createTag(activity.country));
+        if (activity['role of the action']) tags.push(createTag(activity['role of the action']));
+        
+        const tagsHTML = tags.length > 0 
+            ? `<div class="flex flex-wrap gap-2 mb-3">${tags.join('')}</div>`
+            : '';
+        
+        // Create card content
+        const cardContent = `
+            ${createCardHeader(headerIcon, capitalizedTitle)}
+            <p class="text-sm text-gray-text-medium leading-relaxed mb-3">${goals}</p>
+            ${tagsHTML}
+            ${createSourceDisplay(activity.source)}
+        `;
+        
+        return createCard('bg-white rounded-lg shadow-card mb-4 p-4', cardContent);
+    }
+
     // --- Modal Logic ---
     // Show splash modal on page load
     splashModal.classList.remove('hidden');
@@ -233,6 +338,7 @@ document.addEventListener('DOMContentLoaded', () => {
             renderCategoryCards(allData.categories);
         } catch (error) {
             console.error("Could not fetch or parse data:", error);
+            const containerHelper = clearContainer(categoryCardsContainer, '');
             categoryCardsContainer.innerHTML = '<p style="color: red; text-align: center;">Error loading data. Please try again later.</p>';
         }
     }
@@ -260,91 +366,31 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function renderCategoryCards(categories) {
-        categoryCardsContainer.innerHTML = ''; // Clear previous cards
+        const containerHelper = clearContainer(categoryCardsContainer, 'No categories found.');
         if (!categories) {
-            categoryCardsContainer.innerHTML = '<p>No categories found.</p>';
+            containerHelper.showEmpty();
             return;
         }
+        
         for (const categoryName in categories) {
             const activities = categories[categoryName];
-            const card = document.createElement('div');
-            card.className = 'bg-gray-card border border-gray-border border-l-4 border-l-accent-red rounded-lg p-6 sm:p-4 shadow-light cursor-pointer transition-all duration-200 hover:-translate-y-1 hover:shadow-hover';
-
-            const iconName = categoryIcons[categoryName.toLowerCase()] || categoryIcons["whole supply chain"];
-            const capitalizedCategoryName = capitalizeFirstWord(categoryName);
-            
-            card.innerHTML = `
-                <h3 class="mt-0 flex items-center text-xl font-semibold"><span class="material-icons-outlined mr-2 text-2xl">${iconName}</span> ${capitalizedCategoryName}</h3>
-                <p class="text-sm text-primary-teal-light mb-2">${activities.length} activities</p>
-                <p class="text-base text-primary-teal leading-relaxed">${getCategoryDescription(categoryName)}</p>
-            `;
-            card.addEventListener('click', () => showActivityView(categoryName, activities));
+            const card = createCategoryCard(categoryName, activities);
             categoryCardsContainer.appendChild(card);
         }
     }
 
     function renderActivityCards(activities) {
-        activityCardsContainer.innerHTML = ''; // Clear previous cards
+        const containerHelper = clearContainer(activityCardsContainer, 'No activities found for this category.');
         if (!activities || activities.length === 0) {
-            activityCardsContainer.innerHTML = '<p>No activities found for this category.</p>';
+            containerHelper.showEmpty();
             return;
         }
+        
         activities.forEach(activity => {
-            if (Object.keys(activity).length === 0) return; // Skip empty activity objects
-
-            const card = document.createElement('div');
-            card.className = 'bg-white rounded-lg shadow-card mb-4 p-4';
-
-            let headerIcon = '';
-            if (activity.favicon) {
-                // Basic check to prevent broken images if path is just a placeholder or invalid
-                if (activity.favicon.startsWith('images/logos/')) {
-                     headerIcon = `<img src="${activity.favicon}" alt="Favicon" class="w-5 h-5 mr-2 object-contain">`;
-                } else {
-                    // Fallback or skip if favicon path seems incorrect
-                    // console.warn('Invalid favicon path:', activity.favicon);
-                }
+            const card = createActivityCard(activity);
+            if (card) { // Only append if card was created (not null for empty activities)
+                activityCardsContainer.appendChild(card);
             }
-
-            const title = activity.action || 'N/A';
-            const capitalizedTitle = capitalizeFirstWord(title);
-            const goals = activity['goals/objectives'] || 'No description available.';
-            
-            let tagsHTML = '<div class="flex flex-wrap gap-2 mb-3">';
-            if (activity.duration) {
-                tagsHTML += `<span class="inline-block bg-tag text-tag px-3 py-1 rounded-full text-xs">${activity.duration}</span>`;
-            }
-            if (activity.country) {
-                tagsHTML += `<span class="inline-block bg-tag text-tag px-3 py-1 rounded-full text-xs">${activity.country}</span>`;
-            }
-            if (activity['role of the action']) {
-                tagsHTML += `<span class="inline-block bg-tag text-tag px-3 py-1 rounded-full text-xs">${activity['role of the action']}</span>`;
-            }
-            tagsHTML += '</div>';
-
-            let sourceHTML = '';
-            if (activity.source) {
-                // Check if the source is a URL
-                if (activity.source.startsWith('http') || activity.source.startsWith('www')) {
-                    const displayUrl = activity.source.length > 100 ? activity.source.substring(0, 97) + '...' : activity.source;
-                    sourceHTML = `<div><a href="${activity.source}" target="_blank" class="text-xs text-primary-teal break-all no-underline font-normal hover:underline hover:text-primary-teal-dark">${displayUrl}</a></div>`;
-                } else {
-                     sourceHTML = `<p class="text-xs text-primary-teal break-all">${activity.source}</p>`; // Display as text if not a clear URL
-                }
-            } else {
-                sourceHTML = '<p class="text-xs text-primary-teal break-all">N/A</p>';
-            }
-
-            card.innerHTML = `
-                <div class="flex items-center mb-3">
-                    ${headerIcon}
-                    <h4 class="text-lg font-medium text-gray-text-dark m-0">${capitalizedTitle}</h4>
-                </div>
-                <p class="text-sm text-gray-text-medium leading-relaxed mb-3">${goals}</p>
-                ${tagsHTML}
-                ${sourceHTML}
-            `;
-            activityCardsContainer.appendChild(card);
         });
     }
 
