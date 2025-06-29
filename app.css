@@ -69,12 +69,28 @@
   background-color: var(--color-white);
 }
 
+.bg-off-white {
+  background-color: var(--color-off-white);
+}
+
+.bg-gray-light {
+  background-color: var(--color-gray-light);
+}
+
 .text-gray-text-dark {
   color: var(--color-gray-text-dark);
 }
 
 .text-gray-text-medium {
   color: var(--color-gray-text-medium);
+}
+
+.text-gray-text-light {
+  color: var(--color-gray-text-light);
+}
+
+.text-black {
+  color: var(--color-black);
 }
 
 .bg-tag {
@@ -89,8 +105,28 @@
   border-color: var(--color-gray-border);
 }
 
+.border-gray-medium {
+  border-color: var(--color-gray-medium);
+}
+
 .border-l-accent-red {
   border-left-color: var(--color-accent-red);
+}
+
+.bg-accent-red {
+  background-color: var(--color-accent-red);
+}
+
+.bg-accent-red-hover {
+  background-color: var(--color-accent-red-dark);
+}
+
+.bg-splash-green {
+  background-color: var(--color-splash-green);
+}
+
+.border-splash-green {
+  border-color: var(--color-splash-green);
 }
 
 .shadow-card {
@@ -103,4 +139,21 @@
 
 .shadow-hover {
   box-shadow: 0 4px 10px var(--shadow-medium);
+}
+
+.shadow-modal {
+  box-shadow: 0 5px 15px var(--shadow-modal);
+}
+
+.shadow-fab {
+  box-shadow: 0 4px 8px var(--shadow-dark);
+}
+
+.bg-backdrop {
+  background-color: var(--shadow-backdrop);
+}
+
+/* Special clip-path for hexagon shape */
+.clip-hexagon {
+  clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
 }

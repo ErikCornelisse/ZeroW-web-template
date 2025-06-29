@@ -163,34 +163,34 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Modal Logic ---
     // Show splash modal on page load
-    splashModal.style.display = 'block';
+    splashModal.classList.remove('hidden');
     
     // Hide splash modal when continue button is clicked
     splashContinueButton.addEventListener('click', () => {
-        splashModal.style.display = 'none';
+        splashModal.classList.add('hidden');
     });
 
     logo.addEventListener('click', () => {
-        chorizoModal.style.display = 'block';
+        chorizoModal.classList.remove('hidden');
         setFabState('modal');
     });
     appTitle.addEventListener('click', () => {
-        chorizoModal.style.display = 'block';
+        chorizoModal.classList.remove('hidden');
         setFabState('modal');
     });
     // zerowDataSpaceButton.addEventListener('click', () => {
-    //     zerowModal.style.display = 'block';
+    //     zerowModal.classList.remove('hidden');
     //     setFabState('modal');
     // });
 
     // closeChorizoModal.addEventListener('click', () => {
-    //     chorizoModal.style.display = 'none';
+    //     chorizoModal.classList.add('hidden');
     //     if (fabState === 'info') {
     //         setFabState('home');
     //     }
     // });
     // closeZerowModal.addEventListener('click', () => {
-    //     zerowModal.style.display = 'none';
+    //     zerowModal.classList.add('hidden');
     //     if (fabState === 'info') {
     //         setFabState('home');
     //     }
@@ -199,19 +199,19 @@ document.addEventListener('DOMContentLoaded', () => {
     window.addEventListener('click', (event) => {
         let modalWasClosed = false;
         if (event.target === chorizoModal) {
-            chorizoModal.style.display = 'none';
+            chorizoModal.classList.add('hidden');
             modalWasClosed = true;
         }
         if (event.target === zerowModal) {
-            zerowModal.style.display = 'none';
+            zerowModal.classList.add('hidden');
             modalWasClosed = true;
         }
         if (event.target === homeModal) {
-            homeModal.style.display = 'none';
+            homeModal.classList.add('hidden');
             modalWasClosed = true;
         }
         if (event.target === splashModal) {
-            splashModal.style.display = 'none';
+            splashModal.classList.add('hidden');
             modalWasClosed = true;
         }
         if (modalWasClosed && fabState === 'modal') {
@@ -394,14 +394,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     fab.addEventListener('click', () => {
         if (fabState === 'home') {
-            homeModal.style.display = 'block';
+            homeModal.classList.remove('hidden');
             setFabState('modal');
         } else if (fabState === 'category') {
             showCategoryView(); // This will also set FAB state to home via its own call to setFabState
         } else if (fabState === 'modal') { // Changed from 'info'
-            chorizoModal.style.display = 'none';
-            zerowModal.style.display = 'none';
-            homeModal.style.display = 'none';
+            chorizoModal.classList.add('hidden');
+            zerowModal.classList.add('hidden');
+            homeModal.classList.add('hidden');
             setFabState(fabPreviousState); // Revert to previous state
         } else {
             // Fallback for other states, if any are defined with actions

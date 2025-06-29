@@ -68,9 +68,9 @@
     </footer>
 
     <!-- About Modal -->
-    <div id="about-modal" class="modal">
-        <div class="modal-content">
-            <img src="./images/logos/data.chorizoproject.eu_favicon.png" alt="Chorizo Project Logo" class="modal-logo"> <!-- Added logo here -->
+    <div id="about-modal" class="hidden fixed inset-0 z-[1000] overflow-auto bg-backdrop">
+        <div class="bg-off-white my-[10%] mx-auto p-6 border border-gray-medium w-4/5 max-w-2xl rounded-lg shadow-modal text-primary-teal relative">
+            <img src="./images/logos/data.chorizoproject.eu_favicon.png" alt="Chorizo Project Logo" class="absolute top-6 left-6 w-10 h-10 object-contain"> <!-- Added logo here -->
             <!-- <span class="close-button" id="close-about-modal">&times;</span> -->
             <h2>About the Chorizo project</h2>
             <p>The Chorizo Project Food Loss and Waste (FLW) Datahub and “Insighter” serves as a central platform for storing and sharing a wide range of datasets and insights on food loss and waste (FLW) across the EU. This hub features an evidence-based analysis on both previous and ongoing FLW initiatives across the EU, alongside new research on social norms and behaviours. These insights were gathered from several case studies conducted as part of the CHORIZO project, which examined the actions of consumers, businesses, and charities (e.g. food banks) in relation to FLW. Users can access and download datasets upon registration.</p>
@@ -79,52 +79,51 @@
     </div>
 
     <!-- ZeroW Modal -->
-    <div id="zerow-modal" class="modal">
-        <div class="modal-content">
-            <img src="./images/logos/www.zerow-project.eu_favicon.png" alt="ZeroW Project Logo" class="modal-logo"> <!-- Added logo here -->
-            <!-- <span class="close-button" id="close-zerow-modal">&times;</span> -->
-            <h2>About ZeroW</h2>
-            <p>ZeroW addresses the need to move from today's fragmented solutions targeted on isolated food loss and waste (FLW) problems to synergised solutions based on shared data, knowledge, and collective intelligence - breaking siloed solutions and 'opening' closed ecosystems. This is done by creating a 0FLW dataspace. The ZeroW Dataspace is a comprehensive solution for secure data management, enabling seamless integration and collaboration across various platforms.</p>
-            <a href="https://www.zerow-project.eu/data-spaces" target="_blank">Learn more about ZeroW Data Spaces</a>
+    <div id="zerow-modal" class="hidden fixed inset-0 z-[1000] overflow-auto bg-backdrop">
+        <div class="bg-off-white my-[10%] mx-auto p-6 border border-gray-medium w-4/5 max-w-2xl rounded-lg shadow-modal text-primary-teal relative">
+            <img src="./images/logos/www.zerow-project.eu_favicon.png" alt="ZeroW Project Logo" class="absolute top-6 left-6 w-10 h-10 object-contain">
+            <h2 class="text-primary-teal mt-0 pl-14 mb-4 leading-10">About ZeroW</h2>
+            <p class="leading-relaxed mb-4 text-base text-black">ZeroW addresses the need to move from today's fragmented solutions targeted on isolated food loss and waste (FLW) problems to synergised solutions based on shared data, knowledge, and collective intelligence - breaking siloed solutions and 'opening' closed ecosystems. This is done by creating a 0FLW dataspace. The ZeroW Dataspace is a comprehensive solution for secure data management, enabling seamless integration and collaboration across various platforms.</p>
+            <a href="https://www.zerow-project.eu/data-spaces" target="_blank" class="text-primary-teal no-underline font-normal text-base hover:underline">Learn more about ZeroW Data Spaces</a>
         </div>
     </div>
 
     <!-- Home FAB Modal -->
-    <div id="home-modal" class="modal">
-        <div class="modal-content">
-            <img src="./images/logos/www.zerow-project.eu_favicon.png" alt="ZeroW Project Logo" class="modal-logo">
-            <h2>Return to base</h2>
-            <p>You are about to leave the Chorizo Actions Explorer. Click the link below to go to the ZeroW Data Space where other demo applications can be explored. Click the button in in the bottom right corner to stay in the current application.</p>
-            <a href="https://www.zerow-project.eu/data-spaces" target="_blank" class="button">Goto ZeroW Data Space</a>
+    <div id="home-modal" class="hidden fixed inset-0 z-[1000] overflow-auto bg-backdrop">
+        <div class="bg-off-white my-[10%] mx-auto p-6 border border-gray-medium w-4/5 max-w-2xl rounded-lg shadow-modal text-primary-teal relative">
+            <img src="./images/logos/www.zerow-project.eu_favicon.png" alt="ZeroW Project Logo" class="absolute top-6 left-6 w-10 h-10 object-contain">
+            <h2 class="text-primary-teal mt-0 pl-14 mb-4 leading-10">Return to base</h2>
+            <p class="leading-relaxed mb-4 text-base text-black">You are about to leave the Chorizo Actions Explorer. Click the link below to go to the ZeroW Data Space where other demo applications can be explored. Click the button in in the bottom right corner to stay in the current application.</p>
+            <a href="https://www.zerow-project.eu/data-spaces" target="_blank" class="text-primary-teal no-underline font-normal text-base hover:underline">Goto ZeroW Data Space</a>
         </div>
     </div>
 
     <!-- Splash Modal -->
-    <div id="splash-modal" class="modal splash-modal">
-        <div class="modal-content splash-content">
-            <div class="splash-section">
-                <p class="splash-text">Access the Chorizo Data Hub via the ZeroW Data Space</p>
+    <div id="splash-modal" class="hidden fixed inset-0 z-[2000] overflow-auto bg-backdrop">
+        <div class="bg-off-white max-w-lg my-[15%] mx-auto text-center p-8 border border-gray-medium rounded-lg shadow-modal text-primary-teal relative">
+            <div class="my-8 flex flex-col items-center justify-center">
+                <p class="text-xl text-primary-teal leading-6 m-0 font-medium">Access the Chorizo Data Hub via the ZeroW Data Space</p>
             </div>
-            <div class="splash-section">
-                <div class="splash-icons">
-                    <div class="splash-connecting-line"></div>
-                    <div class="splash-icon splash-icon-logo splash-icon-cubic">
-                        <img src="images/logos/data.chorizoproject.eu_favicon.png" alt="Chorizo Project Logo">
+            <div class="my-8 flex flex-col items-center justify-center">
+                <div class="flex justify-center items-center gap-8 relative">
+                    <div class="absolute top-1/2 left-0 right-0 h-1 bg-splash-green z-10 -translate-y-1/2"></div>
+                    <div class="bg-gray-light border-2 border-splash-green rounded-lg p-2 w-16 h-16 flex items-center justify-center shadow-card relative z-20">
+                        <img src="images/logos/data.chorizoproject.eu_favicon.png" alt="Chorizo Project Logo" class="w-full h-full object-contain">
                     </div>
-                    <div class="splash-icon splash-icon-logo splash-icon-hexagon">
-                        <img src="images/logos/www.zerow-project.eu_favicon.png" alt="ZeroW Project Logo">
+                    <div class="bg-splash-green clip-hexagon p-2 w-16 h-16 flex items-center justify-center shadow-card relative z-20">
+                        <img src="images/logos/www.zerow-project.eu_favicon.png" alt="ZeroW Project Logo" class="w-full h-full object-contain">
                     </div>
-                    <span class="material-icons-outlined splash-icon splash-icon-reduced-radius">eco</span>
+                    <span class="material-icons-outlined text-5xl text-accent-red bg-gray-light rounded-full border-2 border-splash-green w-12 h-12 flex items-center justify-center shadow-card relative z-20">eco</span>
                 </div>
             </div>
-            <div class="splash-section">
-                <p class="splash-text">Select a category to see related activities to reduce Food Loss and Waste</p>
+            <div class="my-8 flex flex-col items-center justify-center">
+                <p class="text-xl text-primary-teal leading-6 m-0 font-medium">Select a category to see related activities to reduce Food Loss and Waste</p>
             </div>
-            <button id="splash-continue" class="splash-button">Continue</button>
+            <button id="splash-continue" class="bg-accent-red text-white border-none px-8 py-4 rounded-lg text-lg cursor-pointer mt-4 transition-colors duration-300 hover:bg-accent-red-hover">Continue</button>
         </div>
     </div>
 
     <script src="script.js"></script>
-    <button id="fab" class="fab material-icons-outlined">home</button> <!-- FAB Added here -->
+    <button id="fab" class="fixed bottom-8 right-8 bg-accent-red text-white border-none rounded-full w-14 h-14 text-2xl flex items-center justify-center shadow-fab cursor-pointer transition-all duration-300 z-[1050] hover:bg-accent-red-hover hover:scale-105 material-icons-outlined">home</button> <!-- FAB Added here -->
 </body>
 </html>
