@@ -27,19 +27,12 @@
       "content": "This application demonstrates how information can be found and shared in an easy and controlled way by making use of standardized process.",
       "footer": "<a href=\"https://data.chorizoproject.eu/\" target=\"_blank\">Visit Chorizo Project Datahub</a>"
     },
-    "help": {
-      "state": "closed",
-      "icon": "help",
-      "title": "How to Use",
-      "content": "Navigate through the categories to explore different actions. Click on any item to view detailed information.",
-      "footer": "Need more help? Contact support."
-    },
-    "settings": {
-      "state": "closed",
-      "icon": "settings",
-      "title": "Application Settings",
-      "content": "Customize your experience with the available settings and preferences.",
-      "footer": "Changes are automatically saved."
+    "zerow": {
+      "state": "modal-zerow",
+      "icon": "images/logos/www.zerow-project.eu_favicon.png",
+      "title": "About ZeroW",
+      "content": "ZeroW addresses the need to move from today's fragmented solutions targeted on isolated food loss and waste (FLW) problems to synergised solutions based on shared data, knowledge, and collective intelligence - breaking siloed solutions and 'opening' closed ecosystems. This is done by creating a 0FLW dataspace. The ZeroW Dataspace is a comprehensive solution for secure data management, enabling seamless integration and collaboration across various platforms.",
+      "footer": "<a href=\"https://www.zerow-project.eu/data-spaces\" target=\"_blank\">Learn more about ZeroW Data Spaces</a>"
     }
   },
   "pages": {
