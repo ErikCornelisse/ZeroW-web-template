@@ -3,8 +3,8 @@ body {
     font-family: 'Arial', sans-serif; /* Placeholder, adjust to match ZeroW */
     margin: 0;
     padding: 0;
-    background-color: #f4f4f4; /* Light grey background */
-    color: #2A5A5B; /* Dark teal/greenish text */
+    background-color: var(--color-gray-light); /* Light grey background */
+    color: var(--color-primary-teal); /* Dark teal/greenish text */
     display: flex;
     flex-direction: column;
     min-height: 100vh;
@@ -16,10 +16,10 @@ body {
 
 /* Header */
 header {
-    background-color: #ffffff; /* White background for header */
+    background-color: var(--color-white); /* White background for header */
     padding: 1rem 2rem;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    border-bottom: 3px solid #2A5A5B; /* Dark teal/greenish accent */
+    box-shadow: 0 2px 4px var(--shadow-medium);
+    border-bottom: 3px solid var(--color-primary-teal); /* Dark teal/greenish accent */
 }
 
 .header-content {
@@ -48,14 +48,14 @@ header {
 }
 
 header h1 {
-    color: #2A5A5B; /* Dark teal/greenish color for title */
+    color: var(--color-primary-teal); /* Dark teal/greenish color for title */
     margin: 0; /* Remove default margins, spacing handled by .header-left and .logo */
     font-size: 1.8rem;
     cursor: pointer; /* Make title clickable for modal */
 }
 
 .header-button {
-    background-color: #007bff; /* Blue similar to ZeroW buttons */
+    background-color: var(--color-button-blue); /* Blue similar to ZeroW buttons */
     color: white;
     border: none;
     padding: 0.75rem 1.5rem;
@@ -66,7 +66,7 @@ header h1 {
 }
 
 .header-button:hover {
-    background-color: #0056b3; /* Darker blue on hover */
+    background-color: var(--color-button-blue-dark); /* Darker blue on hover */
 }
 
 /* Style for the ZeroW button to act like an icon button */
@@ -105,7 +105,7 @@ main {
 }
 
 #category-view h2, #activity-view-title {
-    color: #2A5A5B; /* Dark teal/greenish */
+    color: var(--color-primary-teal); /* Dark teal/greenish */
     text-align: left; /* Align to the left */
     margin-bottom: 2rem;
     /* The padding on 'main' and 'header-content' should align these titles with the cards' container */
@@ -119,19 +119,19 @@ main {
 
 /* Category Card */
 .category-card {
-    background-color: #E0E0E0; /* Light grey/off-white background */
-    border: 1px solid #ccc; /* Adjusted border for new background */
-    border-left: 5px solid #B85C47; /* Red/brown accent */
+    background-color: var(--color-gray-card); /* Light grey/off-white background */
+    border: 1px solid var(--color-gray-border); /* Adjusted border for new background */
+    border-left: 5px solid var(--color-accent-red); /* Red/brown accent */
     border-radius: 8px;
     padding: 1.5rem;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    box-shadow: 0 2px 5px var(--shadow-light);
     cursor: pointer;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
 .category-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 10px var(--shadow-medium);
 }
 
 .category-card h3 {
@@ -150,19 +150,19 @@ main {
 
 .category-card .activity-count {
     font-size: 0.9rem;
-    color: #4A6A6B; /* Slightly lighter teal/greenish for less emphasis */
+    color: var(--color-primary-teal-light); /* Slightly lighter teal/greenish for less emphasis */
     margin-bottom: 0.5rem;
 }
 
 .category-card .category-description {
     font-size: 1rem;
-    color: #2A5A5B; /* Dark teal/greenish */
+    color: var(--color-primary-teal); /* Dark teal/greenish */
     line-height: 1.6;
 }
 
 /* Activity View */
 #back-to-categories-button {
-    background-color: #6c757d; /* Grey button */
+    background-color: var(--color-button-gray); /* Grey button */
     color: white;
     border: none;
     padding: 0.75rem 1.5rem;
@@ -175,14 +175,14 @@ main {
 }
 
 #back-to-categories-button:hover {
-    background-color: #5a6268;
+    background-color: var(--color-button-gray-dark);
 }
 
 /* Activity Card */
 .activity-card {
-    background-color: #fff;
+    background-color: var(--color-white);
     border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 4px var(--shadow-medium);
     margin-bottom: 1rem;
     padding: 1rem; /* Assuming a general padding for the card */
 }
@@ -206,12 +206,12 @@ main {
 .activity-card-header h4 {
     margin: 0;
     font-size: 1.1rem;
-    color: #333;
+    color: var(--color-gray-text-dark);
 }
 
 .activity-card .goals {
     font-size: 0.9rem;
-    color: #555;
+    color: var(--color-gray-text-medium);
     line-height: 1.4;
     margin-bottom: 0.75rem;
     padding-left: 0; /* Align with parent card's padding */
@@ -226,8 +226,8 @@ main {
 
 .activity-tags .tag {
     display: inline-block;
-    background-color: #e9ecef; /* Light grey for tags */
-    color: #495057;
+    background-color: var(--color-tag-bg); /* Light grey for tags */
+    color: var(--color-tag-text);
     padding: 0.3rem 0.7rem;
     border-radius: 15px; /* Pill-shaped tags */
     font-size: 0.85rem;
@@ -237,18 +237,18 @@ main {
 
 .activity-card .source {
     font-size: 0.85rem; /* Match tag font size */
-    color: #2A5A5B; /* Match activity name color */
+    color: var(--color-primary-teal); /* Match activity name color */
     text-decoration: none;
     word-break: break-all; /* Allow long URLs/sources to break */
 }
 
 .activity-card .source:hover {
     text-decoration: underline;
-    color: #1A4A4B; /* Darker shade on hover */
+    color: var(--color-primary-teal-dark); /* Darker shade on hover */
 }
 
 .activity-card .source-link a {
-    color: #2A5A5B; /* Match activity name color */
+    color: var(--color-primary-teal); /* Match activity name color */
     text-decoration: none;
     font-weight: normal; /* Set font-weight to normal */
     word-break: break-all; /* Allow long URLs to break */
@@ -257,16 +257,16 @@ main {
 
 .activity-card .source-link a:hover {
     text-decoration: underline;
-    color: #1A4A4B; /* Darker shade on hover */
+    color: var(--color-primary-teal-dark); /* Darker shade on hover */
 }
 
 /* Footer */
 footer {
-    background-color: #2A5A5B; /* Dark teal/greenish background from image */
-    color: #AFC1C2; /* Light greenish/greyish font color from image */
+    background-color: var(--color-footer-bg); /* Dark teal/greenish background from image */
+    color: var(--color-footer-text); /* Light greenish/greyish font color from image */
     text-align: center;
     padding: 1.5rem 2rem;
-    border-top: 3px solid #1A4A4B; /* Slightly darker teal for border */
+    border-top: 3px solid var(--color-primary-teal-dark); /* Slightly darker teal for border */
 }
 
 footer p {
@@ -275,18 +275,18 @@ footer p {
 }
 
 footer a {
-    color: #D0E0D1; /* Lighter shade for links, ensuring contrast */
+    color: var(--color-footer-link); /* Lighter shade for links, ensuring contrast */
     text-decoration: none;
 }
 
 footer a:hover {
     text-decoration: underline;
-    color: #ffffff; /* White on hover for better visibility */
+    color: var(--color-footer-link-hover); /* White on hover for better visibility */
 }
 
 /* Info Cards Section */
 #info-cards-section {
-    background-color: #ffffff;
+    background-color: var(--color-white);
     padding: 1rem 0; /* Vertical padding for the section */
     width: 100%;
     box-sizing: border-box;
@@ -303,9 +303,9 @@ footer a:hover {
 }
 
 .info-card {
-    background-color: #fff; /* Card background */
+    background-color: var(--color-white); /* Card background */
     border-radius: 8px; /* Rounded corners */
-    box-shadow: 0 2px 4px rgba(0,0,0,0.1); /* Card shadow */
+    box-shadow: 0 2px 4px var(--shadow-medium); /* Card shadow */
     padding: 1.5rem; /* Consistent card padding, same as category-card */
     box-sizing: border-box;
     /* width: 300px; Removed, grid handles width */
@@ -332,14 +332,14 @@ footer a:hover {
 .info-card h4 {
     margin-top: 0;
     margin-bottom: 0.5rem;
-    color: #2A5A5B; /* Match category card title color */
+    color: var(--color-primary-teal); /* Match category card title color */
     font-size: 1.25rem; /* Match category card h3 title size */
 }
 
 .info-card p {
     margin-bottom: 0;
     font-size: 1rem; /* Match category card description font size */
-    color: #2A5A5B; /* Match category card description color */
+    color: var(--color-primary-teal); /* Match category card description color */
 }
 
 /* Responsive hiding of info-cards */
@@ -381,19 +381,19 @@ footer a:hover {
     width: 100%; 
     height: 100%; 
     overflow: auto; 
-    background-color: rgba(0,0,0,0.6); 
+    background-color: var(--shadow-backdrop); 
 }
 
 .modal-content {
-    background-color: #fefefe;
+    background-color: var(--color-off-white);
     margin: 10% auto; /* Responsive margin */
     padding: 25px;
-    border: 1px solid #888;
+    border: 1px solid var(--color-gray-medium);
     width: 80%; /* Responsive width */
     max-width: 600px; /* Max width for larger screens */
     border-radius: 10px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-    color: #2A5A5B; /* Modal text color */
+    box-shadow: 0 5px 15px var(--shadow-modal);
+    color: var(--color-primary-teal); /* Modal text color */
     position: relative; /* Needed for absolute positioning of close button and potentially logo */
 }
 
@@ -407,7 +407,7 @@ footer a:hover {
 }
 
 .modal-content h2 {
-    color: #2A5A5B;
+    color: var(--color-primary-teal);
     margin-top: 0;
     padding-left: 55px; /* Add padding to make space for the logo: logo width + desired margin */
     margin-bottom: 1rem; /* Ensure space below title */
@@ -418,11 +418,11 @@ footer a:hover {
     line-height: 1.6;
     margin-bottom: 1rem;
     font-size: 1rem; /* Explicitly set font size for paragraph text */
-    color: #000000; /* Black font color for content text */
+    color: var(--color-black); /* Black font color for content text */
 }
 
 .modal-content a {
-    color: #2A5A5B; /* Match dialog title color */
+    color: var(--color-primary-teal); /* Match dialog title color */
     text-decoration: none;
     font-weight: normal; /* Remove bold */
     font-size: 1rem; /* Match paragraph font size */
@@ -433,7 +433,7 @@ footer a:hover {
 }
 
 .close-button {
-    color: #aaa;
+    color: var(--color-gray-text-light);
     /* float: right; */ /* Replaced by absolute positioning */
     font-size: 28px;
     font-weight: bold;
@@ -447,7 +447,7 @@ footer a:hover {
     position: fixed;
     bottom: 2rem;
     right: 2rem;
-    background-color: #B85C47; /* Same as category card left border */
+    background-color: var(--color-accent-red); /* Same as category card left border */
     color: white; /* Icon color */
     border: none;
     border-radius: 50%; /* Circular shape */
@@ -457,14 +457,14 @@ footer a:hover {
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    box-shadow: 0 4px 8px var(--shadow-dark);
     cursor: pointer;
     transition: background-color 0.3s ease, transform 0.2s ease;
     z-index: 1050; /* Ensure it's above modals if they are 1000 */
 }
 
 .fab:hover {
-    background-color: #A04C3B; /* Darker shade on hover */
+    background-color: var(--color-accent-red-dark); /* Darker shade on hover */
     transform: scale(1.05);
 }
 
@@ -490,7 +490,7 @@ footer a:hover {
 
 .splash-text {
     font-size: 1.2rem;
-    color: #2A5A5B;
+    color: var(--color-primary-teal);
     line-height: 1.5;
     margin: 0;
     font-weight: 500;
@@ -510,15 +510,15 @@ footer a:hover {
     left: 0;
     right: 0;
     height: 4px;
-    background-color: rgb(145, 188, 161); /* Same color as hexagon container */
+    background-color: var(--color-splash-green); /* Same color as hexagon container */
     z-index: 1; /* Place behind the icons but above modal background */
     transform: translateY(-50%); /* Center vertically */
 }
 
 .splash-icon {
     font-size: 3rem;
-    color: #B85C47;
-    background-color: #f4f4f4;
+    color: var(--color-accent-red);
+    background-color: var(--color-gray-light);
     border-radius: 50%;
     padding: 1rem;
     width: 4rem;
@@ -526,7 +526,7 @@ footer a:hover {
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 8px var(--shadow-medium);
     position: relative;
     z-index: 2; /* Ensure icons appear above the connecting line */
 }
@@ -545,7 +545,7 @@ footer a:hover {
 /* Hexagonal container for ZeroW logo */
 .splash-icon-hexagon {
     border-radius: 0; /* Remove circular border-radius */
-    background-color: rgb(145, 188, 161); /* Custom green background color */
+    background-color: var(--color-splash-green); /* Custom green background color */
     clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
     position: relative;
     width: 4.2rem; /* 5% wider than the original 4rem */
@@ -555,8 +555,8 @@ footer a:hover {
 /* Cubic container for first splash icon */
 .splash-icon-cubic {
     border-radius: 8px; /* Rounded corners for cubic appearance */
-    background-color: #f4f4f4; /* Same background as default splash icons */
-    border: 3px solid rgb(145, 188, 161); /* Green border matching hexagon and connecting line */
+    background-color: var(--color-gray-light); /* Same background as default splash icons */
+    border: 3px solid var(--color-splash-green); /* Green border matching hexagon and connecting line */
     width: 4.2rem; /* 5% larger than default icons (4rem * 1.05) */
     height: 4.2rem; /* 5% larger than default icons (4rem * 1.05) */
 }
@@ -564,13 +564,13 @@ footer a:hover {
 /* Reduced radius container for third splash icon */
 .splash-icon-reduced-radius {
     border-radius: 50%; /* Perfect circular border */
-    border: 3px solid rgb(145, 188, 161); /* Green border matching hexagon and connecting line */
+    border: 3px solid var(--color-splash-green); /* Green border matching hexagon and connecting line */
     width: 3.2rem; /* Further reduced for better visual alignment */
     height: 3.2rem; /* Further reduced for better visual alignment */
 }
 
 .splash-button {
-    background-color: #B85C47;
+    background-color: var(--color-accent-red);
     color: white;
     border: none;
     padding: 1rem 2rem;
@@ -582,7 +582,7 @@ footer a:hover {
 }
 
 .splash-button:hover {
-    background-color: #A04C3B;
+    background-color: var(--color-accent-red-dark);
 }
 
 /* Responsive Design */

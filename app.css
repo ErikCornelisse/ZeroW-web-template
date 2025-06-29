@@ -1,5 +1,54 @@
-/* ZeroW Web Template - Additional Custom Styles */
-/* This file is for custom styles that complement the existing style.css */
+/* ZeroW Web Template - CSS Color Variables */
+/* Color system extracted from style.css for consistent theming */
+
+:root {
+  /* Primary Brand Colors */
+  --color-primary-teal: #2A5A5B;           /* Main brand color - dark teal/greenish */
+  --color-primary-teal-dark: #1A4A4B;      /* Darker teal for borders and hover states */
+  --color-primary-teal-light: #4A6A6B;     /* Lighter teal for less emphasis */
+  --color-accent-red: #B85C47;             /* Red/brown accent color */
+  --color-accent-red-dark: #A04C3B;        /* Darker red for hover states */
+  
+  /* Neutral Colors */
+  --color-white: #FFFFFF;                   /* Pure white */
+  --color-off-white: #FEFEFE;              /* Slightly off-white for modal backgrounds */
+  --color-black: #000000;                  /* Pure black for content text */
+  --color-gray-light: #F4F4F4;            /* Light gray background */
+  --color-gray-card: #E0E0E0;             /* Card background gray */
+  --color-gray-border: #CCC;              /* Border gray */
+  --color-gray-medium: #888;              /* Medium gray for modal borders */
+  --color-gray-text-light: #AAA;          /* Light gray for close buttons */
+  --color-gray-text-medium: #555;         /* Medium gray for secondary text */
+  --color-gray-text-dark: #333;           /* Dark gray for headers */
+  
+  /* Button Colors */
+  --color-button-blue: #007BFF;           /* Primary blue button */
+  --color-button-blue-dark: #0056B3;      /* Dark blue for hover */
+  --color-button-gray: #6C757D;           /* Gray button */
+  --color-button-gray-dark: #5A6268;      /* Dark gray for hover */
+  
+  /* Tag and Label Colors */
+  --color-tag-bg: #E9ECEF;                /* Tag background */
+  --color-tag-text: #495057;              /* Tag text color */
+  
+  /* Footer Colors */
+  --color-footer-bg: #2A5A5B;             /* Footer background (same as primary) */
+  --color-footer-text: #AFC1C2;           /* Footer text color */
+  --color-footer-link: #D0E0D1;           /* Footer link color */
+  --color-footer-link-hover: #FFFFFF;     /* Footer link hover */
+  
+  /* Special Colors */
+  --color-splash-green: rgb(145, 188, 161); /* Special green for splash modal */
+  
+  /* Shadow Colors (RGBA) */
+  --shadow-light: rgba(0, 0, 0, 0.05);    /* Very light shadow */
+  --shadow-medium: rgba(0, 0, 0, 0.1);    /* Medium shadow */
+  --shadow-dark: rgba(0, 0, 0, 0.2);      /* Darker shadow */
+  --shadow-modal: rgba(0, 0, 0, 0.3);     /* Modal shadow */
+  --shadow-backdrop: rgba(0, 0, 0, 0.6);  /* Modal backdrop */
+}
+
+/* Additional utility classes that complement the existing style.css */
 
 /* Custom animations and transitions */
 @keyframes slideIn {
