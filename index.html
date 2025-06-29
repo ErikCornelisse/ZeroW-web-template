@@ -15,12 +15,12 @@
     <meta name="apple-mobile-web-app-title" content="ChorizoApp">
     <link rel="apple-touch-icon" href="images/logos/project-logo-48.png"> <!-- Consider creating a dedicated apple-touch-icon -->
 </head>
-<body>
-    <header>
-        <div class="header-content">
-            <div class="header-left"> <!-- New div for logo and title -->
-                <img src="./images/logos/project-logo-48.png" alt="Chorizo Project Logo" id="logo" class="logo">
-                <h1 id="app-title">CHORIZO Actions Explorer</h1>
+<body class="body-base">
+    <header class="bg-white px-8 py-4 shadow-card border-b-4 border-primary-teal-dark max-[480px]:px-4">
+        <div class="flex justify-between items-center flex-wrap max-w-6xl mx-auto px-[calc(0.5rem-5px)]">
+            <div class="flex items-center"> <!-- Header left group -->
+                <img src="./images/logos/project-logo-48.png" alt="Chorizo Project Logo" id="logo" class="block w-12 h-12 mr-4 object-contain cursor-pointer max-[480px]:w-10 max-[480px]:h-10">
+                <h1 id="app-title" class="text-primary-teal m-0 text-3xl cursor-pointer max-[768px]:text-xl max-[480px]:text-xl max-[480px]:mt-2">CHORIZO Actions Explorer</h1>
             </div>
             <!-- <button id="zerow-data-space-button" class="header-button zerow-favicon-button">
                 <img src="./images/logos/www.zerow-project.eu_favicon.png" alt="ZeroW Data Space" class="button-favicon">
@@ -44,27 +44,27 @@
         </div>
     </section>
 
-    <main>
+    <main class="flex-grow px-8 py-8 max-w-6xl w-full mx-auto box-border max-[480px]:px-4">
         <section id="category-view">
-            <h2>Categories</h2>
-            <div id="category-cards-container" class="cards-container">
+            <h2 class="text-primary-teal text-left mb-8">Categories</h2>
+            <div id="category-cards-container" class="grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))] gap-6">
                 <!-- Category cards will be injected here by JavaScript -->
             </div>
         </section>
 
         <section id="activity-view" class="hidden">
-            
-            <h2 id="activity-view-title">Category Activities</h2>
-            <div id="activity-cards-container" class="cards-container">
+            <button id="back-to-categories-button" class="bg-button-gray text-white border-none px-6 py-3 rounded-lg cursor-pointer text-base mb-8 block transition-colors duration-300 hover:bg-button-gray-dark">← Back to Categories</button>
+            <h2 id="activity-view-title" class="text-primary-teal text-left mb-8">Category Activities</h2>
+            <div id="activity-cards-container" class="grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))] gap-6">
                 <!-- Activity cards will be injected here by JavaScript -->
             </div>
         </section>
     </main>
 
-    <footer>
-        <p>© 2025 Part of the <a href="https://www.zerow-project.eu/" target="_blank">ZeroW Data Space</a> demo.</p>
-        <p>Tackling food loss and waste through innovation.</p>
-        <img src="images/logos/ZeroW og EU logo 50 pct. white.png" alt="ZeroW and EU logo" style="margin-top: 10px; height: 50px;">
+    <footer class="bg-footer text-footer-text text-center px-8 py-6 border-t-4 border-primary-teal-dark">
+        <p class="my-1 text-sm">© 2025 Part of the <a href="https://www.zerow-project.eu/" target="_blank" class="text-footer-link no-underline hover:underline hover:text-footer-link-hover">ZeroW Data Space</a> demo.</p>
+        <p class="my-1 text-sm">Tackling food loss and waste through innovation.</p>
+        <img src="images/logos/ZeroW og EU logo 50 pct. white.png" alt="ZeroW and EU logo" class="mt-2 h-12 mx-auto">
     </footer>
 
     <!-- About Modal -->

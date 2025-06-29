@@ -430,4 +430,15 @@ document.addEventListener('DOMContentLoaded', () => {
     // --- Info Card Animation Logic ---
     // Note: Animation logic removed since info cards are hidden on small screens
     // where only one card would be visible (<=687px)
+
+    // Back to categories button
+    const backToCategoriesButton = document.getElementById('back-to-categories-button');
+    backToCategoriesButton.addEventListener('click', () => {
+        showCategoryView();
+    });
+
+    // zerowDataSpaceButton.addEventListener('click', () => {
+    //     zerowModal.classList.remove('hidden');
+    //     setFabState('modal');
+    // });
 });

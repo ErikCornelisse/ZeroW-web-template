@@ -153,7 +153,59 @@
   background-color: var(--shadow-backdrop);
 }
 
+.bg-button-gray {
+  background-color: var(--color-button-gray);
+}
+
+.bg-button-gray-dark {
+  background-color: var(--color-button-gray-dark);
+}
+
+.bg-button-blue {
+  background-color: var(--color-button-blue);
+}
+
+.bg-button-blue-dark {
+  background-color: var(--color-button-blue-dark);
+}
+
+.bg-footer {
+  background-color: var(--color-footer-bg);
+}
+
+.text-footer-text {
+  color: var(--color-footer-text);
+}
+
+.text-footer-link {
+  color: var(--color-footer-link);
+}
+
+.text-footer-link-hover {
+  color: var(--color-footer-link-hover);
+}
+
+/* Base body styling using Tailwind-compatible utility classes */
+.body-base {
+  font-family: 'Arial', sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: var(--color-gray-light);
+  color: var(--color-primary-teal);
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.hidden {
+  display: none !important;
+}
+
 /* Special clip-path for hexagon shape */
 .clip-hexagon {
   clip-path: polygon(25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%, 0% 50%);
+}
+
+.border-primary-teal-dark {
+  border-color: var(--color-primary-teal-dark);
 }
