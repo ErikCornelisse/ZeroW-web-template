@@ -47,3 +47,12 @@
   --shadow-modal: rgba(0, 0, 0, 0.3);     /* Modal shadow */
   --shadow-backdrop: rgba(0, 0, 0, 0.6);  /* Modal backdrop */
 }
+
+/* Tailwind-compatible utility classes for consistent theming */
+.text-primary-teal {
+  color: var(--color-primary-teal);
+}
+
+.shadow-card {
+  box-shadow: 0 2px 4px var(--shadow-medium);
+}
