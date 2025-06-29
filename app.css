@@ -53,6 +53,30 @@
   color: var(--color-primary-teal);
 }
 
+.text-primary-teal-light {
+  color: var(--color-primary-teal-light);
+}
+
+.bg-gray-card {
+  background-color: var(--color-gray-card);
+}
+
+.border-gray-border {
+  border-color: var(--color-gray-border);
+}
+
+.border-l-accent-red {
+  border-left-color: var(--color-accent-red);
+}
+
 .shadow-card {
   box-shadow: 0 2px 4px var(--shadow-medium);
+}
+
+.shadow-light {
+  box-shadow: 0 2px 5px var(--shadow-light);
+}
+
+.shadow-hover {
+  box-shadow: 0 4px 10px var(--shadow-medium);
 }

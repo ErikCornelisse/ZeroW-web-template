@@ -267,15 +267,15 @@ document.addEventListener('DOMContentLoaded', () => {
         for (const categoryName in categories) {
             const activities = categories[categoryName];
             const card = document.createElement('div');
-            card.className = 'category-card';
+            card.className = 'bg-gray-card border border-gray-border border-l-4 border-l-accent-red rounded-lg p-6 sm:p-4 shadow-light cursor-pointer transition-all duration-200 hover:-translate-y-1 hover:shadow-hover';
 
             const iconName = categoryIcons[categoryName.toLowerCase()] || categoryIcons["whole supply chain"];
             const capitalizedCategoryName = capitalizeFirstWord(categoryName);
             
             card.innerHTML = `
-                <h3><span class="material-icons-outlined category-icon">${iconName}</span> ${capitalizedCategoryName}</h3>
-                <p class="activity-count">${activities.length} activities</p>
-                <p class="category-description">${getCategoryDescription(categoryName)}</p>
+                <h3 class="mt-0 flex items-center text-xl font-semibold"><span class="material-icons-outlined mr-2 text-2xl">${iconName}</span> ${capitalizedCategoryName}</h3>
+                <p class="text-sm text-primary-teal-light mb-2">${activities.length} activities</p>
+                <p class="text-base text-primary-teal leading-relaxed">${getCategoryDescription(categoryName)}</p>
             `;
             card.addEventListener('click', () => showActivityView(categoryName, activities));
             categoryCardsContainer.appendChild(card);
