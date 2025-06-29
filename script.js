@@ -29,6 +29,14 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             appConfig = await response.json();
             
+            // Load templates from configuration
+            if (appConfig.templates) {
+                Object.keys(appConfig.templates).forEach(templateName => {
+                    const templateConfig = appConfig.templates[templateName];
+                    Templates.register(templateName, templateConfig.template);
+                });
+            }
+            
             // Apply configuration to the page
             if (appConfig.pages && appConfig.pages.home && appConfig.pages.home.header) {
                 const headerConfig = appConfig.pages.home.header;
@@ -142,6 +150,8 @@ document.addEventListener('DOMContentLoaded', () => {
     loadAppConfig().then(() => {
         // Fetch data after config is loaded
         fetchData();
+        // Generate info cards if configured
+        generateInfoCards();
     });
 
     const categoryIcons = {
@@ -161,6 +171,131 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!str) return '';
         return str.charAt(0).toUpperCase() + str.slice(1);
     }
+
+    // --- Template System ---
+    
+    // Simple template engine for HTML generation
+    const Templates = {
+        // Template registry
+        templates: {},
+        
+        // Register a template
+        register(name, template) {
+            this.templates[name] = template;
+        },
+        
+        // Register multiple templates from an object
+        registerAll(templatesObj) {
+            Object.keys(templatesObj).forEach(name => {
+                this.register(name, templatesObj[name]);
+            });
+        },
+        
+        // Render a template with data
+        render(name, data = {}) {
+            const template = this.templates[name];
+            if (!template) {
+                console.warn(`Template '${name}' not found`);
+                return '';
+            }
+            
+            // Simple template interpolation
+            return template.replace(/\{\{(.*?)\}\}/g, (match, key) => {
+                const keys = key.trim().split('.');
+                let value = data;
+                
+                for (const k of keys) {
+                    value = value && value[k] !== undefined ? value[k] : '';
+                }
+                
+                return value;
+            });
+        },
+        
+        // Render template with conditional blocks and loops
+        renderWithConditions(name, data = {}) {
+            let html = this.render(name, data);
+            
+            // Handle conditional blocks {{#if condition}}...{{/if}}
+            html = html.replace(/\{\{#if\s+(\w+)\}\}(.*?)\{\{\/if\}\}/gs, (match, condition, content) => {
+                return data[condition] ? content : '';
+            });
+            
+            // Handle negative conditional blocks {{#if !condition}}...{{/if}}
+            html = html.replace(/\{\{#if\s+!(\w+)\}\}(.*?)\{\{\/if\}\}/gs, (match, condition, content) => {
+                return !data[condition] ? content : '';
+            });
+            
+            // Handle loops {{#each array}}...{{/each}}
+            html = html.replace(/\{\{#each\s+(\w+)\}\}(.*?)\{\{\/each\}\}/gs, (match, arrayName, itemTemplate) => {
+                const array = data[arrayName];
+                if (!Array.isArray(array)) return '';
+                
+                return array.map(item => {
+                    return itemTemplate.replace(/\{\{this\.(\w+)\}\}/g, (match, prop) => {
+                        return item[prop] || '';
+                    }).replace(/\{\{this\}\}/g, item);
+                }).join('');
+            });
+            
+            return html;
+        },
+        
+        // Check if template exists
+        exists(name) {
+            return !!this.templates[name];
+        },
+        
+        // Get all registered template names
+        getTemplateNames() {
+            return Object.keys(this.templates);
+        }
+    };
+
+    // Register card templates
+    Templates.register('categoryCard', `
+        <h3 class="mt-0 flex items-center text-xl font-semibold">
+            <span class="material-icons-outlined mr-2 text-2xl">{{icon}}</span> 
+            {{title}}
+        </h3>
+        <p class="text-sm text-primary-teal-light mb-2">{{count}} activities</p>
+        <p class="text-base text-primary-teal leading-relaxed">{{description}}</p>
+    `);
+
+    Templates.register('activityCard', `
+        {{#if headerIcon}}
+        <div class="flex items-center mb-3">
+            {{headerIcon}}
+            <h4 class="text-lg font-medium text-gray-text-dark m-0">{{title}}</h4>
+        </div>
+        {{/if}}
+        {{#if !headerIcon}}
+        <div class="flex items-center mb-3">
+            <h4 class="text-lg font-medium text-gray-text-dark m-0">{{title}}</h4>
+        </div>
+        {{/if}}
+        <p class="text-sm text-gray-text-medium leading-relaxed mb-3">{{description}}</p>
+        {{#if tags}}
+        <div class="flex flex-wrap gap-2 mb-3">
+            {{#each tags}}
+            <span class="inline-block bg-tag text-tag px-3 py-1 rounded-full text-xs">{{this}}</span>
+            {{/each}}
+        </div>
+        {{/if}}
+        {{sourceDisplay}}
+    `);
+
+    Templates.register('tag', `
+        <span class="inline-block bg-tag text-tag px-3 py-1 rounded-full text-xs {{additionalClasses}}">{{text}}</span>
+    `);
+
+    Templates.register('sourceLink', `
+        <div><a href="{{url}}" target="_blank" class="text-xs text-primary-teal break-all no-underline font-normal hover:underline hover:text-primary-teal-dark">{{displayText}}</a></div>
+    `);
+
+    Templates.register('sourceText', `
+        <p class="text-xs text-primary-teal break-all">{{text}}</p>
+    `);
 
     // --- Reusable Card Creation Functions ---
     
@@ -184,55 +319,48 @@ document.addEventListener('DOMContentLoaded', () => {
         };
     }
 
-    // Create a tag element for activity cards
-    function createTag(text, additionalClasses = '') {
-        return `<span class="inline-block bg-tag text-tag px-3 py-1 rounded-full text-xs ${additionalClasses}">${text}</span>`;
-    }
-
-    // Create header with icon for cards
-    function createCardHeader(iconHtml, title, headerClasses = 'flex items-center mb-3') {
-        return `<div class="${headerClasses}">${iconHtml}<h4 class="text-lg font-medium text-gray-text-dark m-0">${title}</h4></div>`;
-    }
-
-    // Create source link or text display
+    // Create source link or text display using templates
     function createSourceDisplay(source) {
         if (!source) {
-            return '<p class="text-xs text-primary-teal break-all">N/A</p>';
+            return Templates.render('sourceText', { text: 'N/A' });
         }
         
         if (source.startsWith('http') || source.startsWith('www')) {
             const displayUrl = source.length > 100 ? source.substring(0, 97) + '...' : source;
-            return `<div><a href="${source}" target="_blank" class="text-xs text-primary-teal break-all no-underline font-normal hover:underline hover:text-primary-teal-dark">${displayUrl}</a></div>`;
+            return Templates.render('sourceLink', { 
+                url: source, 
+                displayText: displayUrl 
+            });
         } else {
-            return `<p class="text-xs text-primary-teal break-all">${source}</p>`;
+            return Templates.render('sourceText', { text: source });
         }
     }
 
-    // Generic function to create category cards
+    // Generic function to create category cards using templates
     function createCategoryCard(categoryName, activities) {
         const iconName = categoryIcons[categoryName.toLowerCase()] || categoryIcons["whole supply chain"];
         const capitalizedCategoryName = capitalizeFirstWord(categoryName);
         const description = getCategoryDescription(categoryName);
         
-        const cardContent = `
-            <h3 class="mt-0 flex items-center text-xl font-semibold">
-                <span class="material-icons-outlined mr-2 text-2xl">${iconName}</span> 
-                ${capitalizedCategoryName}
-            </h3>
-            <p class="text-sm text-primary-teal-light mb-2">${activities.length} activities</p>
-            <p class="text-base text-primary-teal leading-relaxed">${description}</p>
-        `;
+        const templateData = {
+            icon: iconName,
+            title: capitalizedCategoryName,
+            count: activities.length,
+            description: description
+        };
         
-        const card = createCard(
-            'bg-gray-card border border-gray-border border-l-4 border-l-accent-red rounded-lg p-6 sm:p-4 shadow-light cursor-pointer transition-all duration-200 hover:-translate-y-1 hover:shadow-hover',
-            cardContent
-        );
+        const cardContent = Templates.render('categoryCard', templateData);
         
+        // Use className from config if available, otherwise fallback to default
+        const className = (appConfig.templates && appConfig.templates.categoryCard && appConfig.templates.categoryCard.className) ||
+            'bg-gray-card border border-gray-border border-l-4 border-l-accent-red rounded-lg p-6 sm:p-4 shadow-light cursor-pointer transition-all duration-200 hover:-translate-y-1 hover:shadow-hover';
+        
+        const card = createCard(className, cardContent);
         card.addEventListener('click', () => showActivityView(categoryName, activities));
         return card;
     }
 
-    // Generic function to create activity cards
+    // Generic function to create activity cards using templates
     function createActivityCard(activity) {
         if (Object.keys(activity).length === 0) return null;
 
@@ -246,25 +374,81 @@ document.addEventListener('DOMContentLoaded', () => {
             headerIcon = `<img src="${activity.favicon}" alt="Favicon" class="w-5 h-5 mr-2 object-contain">`;
         }
         
-        // Create tags
+        // Create tags array
         const tags = [];
-        if (activity.duration) tags.push(createTag(activity.duration));
-        if (activity.country) tags.push(createTag(activity.country));
-        if (activity['role of the action']) tags.push(createTag(activity['role of the action']));
+        if (activity.duration) tags.push(activity.duration);
+        if (activity.country) tags.push(activity.country);
+        if (activity['role of the action']) tags.push(activity['role of the action']);
         
-        const tagsHTML = tags.length > 0 
-            ? `<div class="flex flex-wrap gap-2 mb-3">${tags.join('')}</div>`
-            : '';
+        const templateData = {
+            title: capitalizedTitle,
+            description: goals,
+            headerIcon: headerIcon,
+            tags: tags.length > 0 ? tags : null,
+            sourceDisplay: createSourceDisplay(activity.source)
+        };
         
-        // Create card content
-        const cardContent = `
-            ${createCardHeader(headerIcon, capitalizedTitle)}
-            <p class="text-sm text-gray-text-medium leading-relaxed mb-3">${goals}</p>
-            ${tagsHTML}
-            ${createSourceDisplay(activity.source)}
-        `;
+        const cardContent = Templates.renderWithConditions('activityCard', templateData);
         
-        return createCard('bg-white rounded-lg shadow-card mb-4 p-4', cardContent);
+        // Use className from config if available, otherwise fallback to default
+        const className = (appConfig.templates && appConfig.templates.activityCard && appConfig.templates.activityCard.className) ||
+            'bg-white rounded-lg shadow-card mb-4 p-4';
+        
+        return createCard(className, cardContent);
+    }
+
+    // Generate info cards dynamically from configuration
+    function generateInfoCards() {
+        if (!appConfig.pages || !appConfig.pages.home || !appConfig.pages.home.content || !appConfig.pages.home.content.info) {
+            return;
+        }
+        
+        const infoCardsConfig = appConfig.pages.home.content.info.cards;
+        if (!infoCardsConfig) return;
+        
+        // Find the info cards container in the existing HTML
+        const infoCardsGrid = document.querySelector('#info-cards-section .grid');
+        if (!infoCardsGrid) return;
+        
+        // Clear existing static cards (optional - could be kept for fallback)
+        // infoCardsGrid.innerHTML = '';
+        
+        // Generate cards from configuration
+        Object.keys(infoCardsConfig).forEach(cardKey => {
+            const cardConfig = infoCardsConfig[cardKey];
+            
+            // Handle image cards differently
+            if (cardConfig.content && cardConfig.content.startsWith('images/')) {
+                // This is an image card
+                const imageCard = document.createElement('div');
+                imageCard.className = 'bg-white rounded-lg shadow-sm p-0 max-[1011px]:hidden';
+                imageCard.innerHTML = `<img src="${cardConfig.content}" alt="${cardConfig.footer || cardConfig.header}" class="w-full h-full object-cover rounded-lg">`;
+                // Don't add image cards dynamically as they're handled in static HTML
+                return;
+            }
+            
+            const templateData = {
+                header: cardConfig.header,
+                content: cardConfig.content,
+                footer: cardConfig.footer || null
+            };
+            
+            const cardContent = Templates.renderWithConditions('infoCard', templateData);
+            const className = (appConfig.templates && appConfig.templates.infoCard && appConfig.templates.infoCard.className) ||
+                'bg-white rounded-lg shadow-sm p-6 flex flex-col justify-center items-start text-left';
+            
+            // Only add if this card doesn't already exist
+            const existingCards = infoCardsGrid.querySelectorAll('.bg-white.rounded-lg');
+            const shouldAdd = Array.from(existingCards).every(card => {
+                const h4 = card.querySelector('h4');
+                return !h4 || h4.textContent !== cardConfig.header;
+            });
+            
+            if (shouldAdd) {
+                const card = createCard(className, cardContent);
+                infoCardsGrid.appendChild(card);
+            }
+        });
     }
 
     // --- Modal Logic ---

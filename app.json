@@ -5,6 +5,20 @@
     "application_name": "Actions Explorer",
     "data": "data.json"
   },
+  "templates": {
+    "categoryCard": {
+      "template": "<h3 class=\"mt-0 flex items-center text-xl font-semibold\"><span class=\"material-icons-outlined mr-2 text-2xl\">{{icon}}</span> {{title}}</h3><p class=\"text-sm text-primary-teal-light mb-2\">{{count}} activities</p><p class=\"text-base text-primary-teal leading-relaxed\">{{description}}</p>",
+      "className": "bg-gray-card border border-gray-border border-l-4 border-l-accent-red rounded-lg p-6 sm:p-4 shadow-light cursor-pointer transition-all duration-200 hover:-translate-y-1 hover:shadow-hover"
+    },
+    "activityCard": {
+      "template": "{{#if headerIcon}}<div class=\"flex items-center mb-3\">{{headerIcon}}<h4 class=\"text-lg font-medium text-gray-text-dark m-0\">{{title}}</h4></div>{{/if}}{{#if !headerIcon}}<div class=\"flex items-center mb-3\"><h4 class=\"text-lg font-medium text-gray-text-dark m-0\">{{title}}</h4></div>{{/if}}<p class=\"text-sm text-gray-text-medium leading-relaxed mb-3\">{{description}}</p>{{#if tags}}<div class=\"flex flex-wrap gap-2 mb-3\">{{#each tags}}<span class=\"inline-block bg-tag text-tag px-3 py-1 rounded-full text-xs\">{{this}}</span>{{/each}}</div>{{/if}}{{sourceDisplay}}",
+      "className": "bg-white rounded-lg shadow-card mb-4 p-4"
+    },
+    "infoCard": {
+      "template": "<h4 class=\"mt-0 mb-2 text-xl font-semibold text-primary-teal\">{{header}}</h4><p class=\"mb-0 text-base text-primary-teal\">{{content}}</p>{{#if footer}}<p class=\"text-sm text-primary-teal-light mt-2\">{{footer}}</p>{{/if}}",
+      "className": "bg-white rounded-lg shadow-sm p-6 flex flex-col justify-center items-start text-left"
+    }
+  },
   "splash": {
     "icon": "images/logos/project-logo-48.png",
     "title": "Welcome to ZeroW web template",
