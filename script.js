@@ -67,14 +67,15 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        const modalContent = modal.querySelector('.modal-content');
+        // The modal content is the direct child div, not a class-based selector
+        const modalContent = modal.querySelector('div.bg-off-white');
         if (!modalContent) {
             console.warn(`Modal content not found in modal '${modalName}'`);
             return;
         }
 
         // Update modal logo/icon if specified
-        const modalLogo = modalContent.querySelector('.modal-logo');
+        const modalLogo = modalContent.querySelector('img');
         if (modalLogo && modalConfig.icon) {
             // Check if icon is a URL/path (contains '/' or '.') or Material Icon name
             if (modalConfig.icon.includes('/') || modalConfig.icon.includes('.')) {
