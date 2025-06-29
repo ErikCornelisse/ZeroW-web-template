@@ -292,13 +292,13 @@ document.addEventListener('DOMContentLoaded', () => {
             if (Object.keys(activity).length === 0) return; // Skip empty activity objects
 
             const card = document.createElement('div');
-            card.className = 'activity-card';
+            card.className = 'bg-white rounded-lg shadow-card mb-4 p-4';
 
             let headerIcon = '';
             if (activity.favicon) {
                 // Basic check to prevent broken images if path is just a placeholder or invalid
                 if (activity.favicon.startsWith('images/logos/')) {
-                     headerIcon = `<img src="${activity.favicon}" alt="Favicon">`;
+                     headerIcon = `<img src="${activity.favicon}" alt="Favicon" class="w-5 h-5 mr-2 object-contain">`;
                 } else {
                     // Fallback or skip if favicon path seems incorrect
                     // console.warn('Invalid favicon path:', activity.favicon);
@@ -309,15 +309,15 @@ document.addEventListener('DOMContentLoaded', () => {
             const capitalizedTitle = capitalizeFirstWord(title);
             const goals = activity['goals/objectives'] || 'No description available.';
             
-            let tagsHTML = '<div class="activity-tags">';
+            let tagsHTML = '<div class="flex flex-wrap gap-2 mb-3">';
             if (activity.duration) {
-                tagsHTML += `<span class="tag">${activity.duration}</span>`;
+                tagsHTML += `<span class="inline-block bg-tag text-tag px-3 py-1 rounded-full text-xs">${activity.duration}</span>`;
             }
             if (activity.country) {
-                tagsHTML += `<span class="tag">${activity.country}</span>`;
+                tagsHTML += `<span class="inline-block bg-tag text-tag px-3 py-1 rounded-full text-xs">${activity.country}</span>`;
             }
             if (activity['role of the action']) {
-                tagsHTML += `<span class="tag">${activity['role of the action']}</span>`;
+                tagsHTML += `<span class="inline-block bg-tag text-tag px-3 py-1 rounded-full text-xs">${activity['role of the action']}</span>`;
             }
             tagsHTML += '</div>';
 
@@ -326,20 +326,20 @@ document.addEventListener('DOMContentLoaded', () => {
                 // Check if the source is a URL
                 if (activity.source.startsWith('http') || activity.source.startsWith('www')) {
                     const displayUrl = activity.source.length > 100 ? activity.source.substring(0, 97) + '...' : activity.source;
-                    sourceHTML = `<div class="source-link"><a href="${activity.source}" target="_blank">${displayUrl}</a></div>`;
+                    sourceHTML = `<div><a href="${activity.source}" target="_blank" class="text-xs text-primary-teal break-all no-underline font-normal hover:underline hover:text-primary-teal-dark">${displayUrl}</a></div>`;
                 } else {
-                     sourceHTML = `<p class="source">${activity.source}</p>`; // Display as text if not a clear URL
+                     sourceHTML = `<p class="text-xs text-primary-teal break-all">${activity.source}</p>`; // Display as text if not a clear URL
                 }
             } else {
-                sourceHTML = '<p class="source">N/A</p>';
+                sourceHTML = '<p class="text-xs text-primary-teal break-all">N/A</p>';
             }
 
             card.innerHTML = `
-                <div class="activity-card-header">
+                <div class="flex items-center mb-3">
                     ${headerIcon}
-                    <h4>${capitalizedTitle}</h4>
+                    <h4 class="text-lg font-medium text-gray-text-dark m-0">${capitalizedTitle}</h4>
                 </div>
-                <p class="goals">${goals}</p>
+                <p class="text-sm text-gray-text-medium leading-relaxed mb-3">${goals}</p>
                 ${tagsHTML}
                 ${sourceHTML}
             `;

@@ -135,88 +135,6 @@ main {
     background-color: var(--color-button-gray-dark);
 }
 
-/* Activity Card */
-.activity-card {
-    background-color: var(--color-white);
-    border-radius: 8px;
-    box-shadow: 0 2px 4px var(--shadow-medium);
-    margin-bottom: 1rem;
-    padding: 1rem; /* Assuming a general padding for the card */
-}
-
-.activity-card-header {
-    display: flex;
-    align-items: center;
-    margin-bottom: 0.75rem;
-    padding-left: 0; /* Align with parent card's padding */
-    margin-left: 0;  /* Reset any specific margin */
-}
-
-.activity-card-header img {
-    width: 20px; /* Adjust size as needed */
-    height: 20px; /* Adjust size as needed */
-    margin-left: 0;   /* Align icon with the start of the header */
-    margin-right: 0.5rem; /* Space between icon and title */
-    object-fit: contain;
-}
-
-.activity-card-header h4 {
-    margin: 0;
-    font-size: 1.1rem;
-    color: var(--color-gray-text-dark);
-}
-
-.activity-card .goals {
-    font-size: 0.9rem;
-    color: var(--color-gray-text-medium);
-    line-height: 1.4;
-    margin-bottom: 0.75rem;
-    padding-left: 0; /* Align with parent card's padding */
-    margin-left: 0;  /* Reset any specific margin */
-}
-
-.activity-tags {
-    margin-bottom: 0.75rem;
-    padding-left: 0; /* Align with parent card's padding */
-    margin-left: 0;  /* Reset any specific margin */
-}
-
-.activity-tags .tag {
-    display: inline-block;
-    background-color: var(--color-tag-bg); /* Light grey for tags */
-    color: var(--color-tag-text);
-    padding: 0.3rem 0.7rem;
-    border-radius: 15px; /* Pill-shaped tags */
-    font-size: 0.85rem;
-    margin-right: 0.5rem;
-    margin-bottom: 0.5rem;
-}
-
-.activity-card .source {
-    font-size: 0.85rem; /* Match tag font size */
-    color: var(--color-primary-teal); /* Match activity name color */
-    text-decoration: none;
-    word-break: break-all; /* Allow long URLs/sources to break */
-}
-
-.activity-card .source:hover {
-    text-decoration: underline;
-    color: var(--color-primary-teal-dark); /* Darker shade on hover */
-}
-
-.activity-card .source-link a {
-    color: var(--color-primary-teal); /* Match activity name color */
-    text-decoration: none;
-    font-weight: normal; /* Set font-weight to normal */
-    word-break: break-all; /* Allow long URLs to break */
-    font-size: 0.85rem; /* Match tag font size */
-}
-
-.activity-card .source-link a:hover {
-    text-decoration: underline;
-    color: var(--color-primary-teal-dark); /* Darker shade on hover */
-}
-
 /* Footer */
 footer {
     background-color: var(--color-footer-bg); /* Dark teal/greenish background from image */
@@ -496,13 +414,4 @@ footer a:hover {
         margin-top: 0.5rem; /* Ensure space when title is below icons */
     }
     /* .header-button { ... } */ /* Styles for generic .header-button might need review */
-    .activity-card {
-        padding: 1rem;
-    }
-    .activity-card-header {
-        margin-left: -1rem; /* Adjust to match new card padding */
-        margin-right: -1rem; /* Adjust to match new card padding */
-        margin-top: -1rem; /* Adjust to match new card padding */
-        padding: 0.5rem 1rem; /* top/bottom 0.5rem, left/right 1rem to align content */
-    }
 }

@@ -57,8 +57,32 @@
   color: var(--color-primary-teal-light);
 }
 
+.text-primary-teal-dark {
+  color: var(--color-primary-teal-dark);
+}
+
 .bg-gray-card {
   background-color: var(--color-gray-card);
+}
+
+.bg-white {
+  background-color: var(--color-white);
+}
+
+.text-gray-text-dark {
+  color: var(--color-gray-text-dark);
+}
+
+.text-gray-text-medium {
+  color: var(--color-gray-text-medium);
+}
+
+.bg-tag {
+  background-color: var(--color-tag-bg);
+}
+
+.text-tag {
+  color: var(--color-tag-text);
 }
 
 .border-gray-border {
