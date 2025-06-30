@@ -263,18 +263,13 @@ document.addEventListener('DOMContentLoaded', () => {
     `);
 
     Templates.register('activityCard', `
-        {{#if headerIcon}}
         <div class="flex items-center mb-3">
             {{headerIcon}}
             <h4 class="text-lg font-medium text-gray-text-dark m-0">{{title}}</h4>
         </div>
-        {{/if}}
-        {{#if !headerIcon}}
-        <div class="flex items-center mb-3">
-            <h4 class="text-lg font-medium text-gray-text-dark m-0">{{title}}</h4>
-        </div>
-        {{/if}}
+        {{#if description}}
         <p class="text-sm text-gray-text-medium leading-relaxed mb-3">{{description}}</p>
+        {{/if}}
         {{#if tags}}
         <div class="flex flex-wrap gap-2 mb-3">
             {{#each tags}}
@@ -368,6 +363,9 @@ document.addEventListener('DOMContentLoaded', () => {
         const capitalizedTitle = capitalizeFirstWord(title);
         const goals = activity['goals/objectives'] || 'No description available.';
         
+        // Avoid duplication: if goals/objectives is the same as action, use empty description
+        const description = (goals && goals.toLowerCase() !== title.toLowerCase()) ? goals : '';
+        
         // Create header icon
         let headerIcon = '';
         if (activity.favicon && activity.favicon.startsWith('images/logos/')) {
@@ -382,7 +380,7 @@ document.addEventListener('DOMContentLoaded', () => {
         
         const templateData = {
             title: capitalizedTitle,
-            description: goals,
+            description: description,
             headerIcon: headerIcon,
             tags: tags.length > 0 ? tags : null,
             sourceDisplay: createSourceDisplay(activity.source)
