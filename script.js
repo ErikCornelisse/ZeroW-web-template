@@ -372,7 +372,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // Render with Mustache
             const cardContent = Mustache.render(MustacheTemplates.infoCard, templateData);
             const className = (appConfig.templates && appConfig.templates.infoCard && appConfig.templates.infoCard.className) ||
-                'bg-white rounded-lg shadow-sm p-6 flex flex-col justify-center items-start text-left';
+                'bg-white rounded-lg shadow-sm p-6 flex flex-col justify-start items-start text-left';
             
             const card = createCard(className, cardContent);
             infoCardsGrid.appendChild(card);

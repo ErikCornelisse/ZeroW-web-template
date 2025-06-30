@@ -16,7 +16,7 @@
     },
     "infoCard": {
       "template": "<h4 class=\"mt-0 mb-2 text-xl font-semibold text-primary-teal\">{{header}}</h4><p class=\"mb-0 text-base text-primary-teal\">{{content}}</p>{{#if footer}}<p class=\"text-sm text-primary-teal-light mt-2\">{{footer}}</p>{{/if}}",
-      "className": "bg-white rounded-lg shadow-sm p-6 flex flex-col justify-center items-start text-left"
+      "className": "bg-white rounded-lg shadow-sm p-6 flex flex-col justify-start items-start text-left"
     }
   },
   "splash": {
