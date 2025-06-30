@@ -358,11 +358,11 @@ document.addEventListener('DOMContentLoaded', () => {
             
             // Handle image cards differently
             if (cardConfig.content && cardConfig.content.startsWith('images/')) {
-                // This is an image card
+                // This is an image card - create and add it
                 const imageCard = document.createElement('div');
                 imageCard.className = 'bg-white rounded-lg shadow-sm p-0 max-[1011px]:hidden';
                 imageCard.innerHTML = `<img src="${cardConfig.content}" alt="${cardConfig.footer || cardConfig.header}" class="w-full h-full object-cover rounded-lg">`;
-                // Don't add image cards dynamically as they're handled in static HTML
+                infoCardsGrid.appendChild(imageCard);
                 return;
             }
             
@@ -374,17 +374,8 @@ document.addEventListener('DOMContentLoaded', () => {
             const className = (appConfig.templates && appConfig.templates.infoCard && appConfig.templates.infoCard.className) ||
                 'bg-white rounded-lg shadow-sm p-6 flex flex-col justify-center items-start text-left';
             
-            // Only add if this card doesn't already exist
-            const existingCards = infoCardsGrid.querySelectorAll('.bg-white.rounded-lg');
-            const shouldAdd = Array.from(existingCards).every(card => {
-                const h4 = card.querySelector('h4');
-                return !h4 || h4.textContent !== cardConfig.header;
-            });
-            
-            if (shouldAdd) {
-                const card = createCard(className, cardContent);
-                infoCardsGrid.appendChild(card);
-            }
+            const card = createCard(className, cardContent);
+            infoCardsGrid.appendChild(card);
         });
     }
 
