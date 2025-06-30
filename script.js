@@ -4,7 +4,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const categoryCardsContainer = document.getElementById('category-cards-container');
     const activityCardsContainer = document.getElementById('activity-cards-container');
     const activityViewTitle = document.getElementById('activity-view-title');
-    const infoCardsSection = document.getElementById('info-cards-section'); // Added this line
+    const infoCardsSection = document.getElementById('info-cards-section');
+    const loginCardsSection = document.getElementById('login-cards-section');
 
     // Generic function to clear container and handle empty states
     function clearContainer(container, emptyMessage) {
@@ -29,6 +30,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let allData = {};
     let appConfig = {};
+    let dataAccessible = false; // Track if data.json is accessible
 
     // Load app configuration
     async function loadAppConfig() {
@@ -89,13 +91,42 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Initialize app configuration
     loadAppConfig().then(() => {
-        // Fetch data after config is loaded
-        fetchData();
         // Generate info cards if configured
         generateInfoCards();
-        // Generate login cards if configured
-        generateLoginCards();
+        // Try to fetch data and manage visibility
+        fetchDataAndManageVisibility();
     });
+
+    // Function to manage section visibility based on data access
+    function manageSectionVisibility() {
+        if (dataAccessible) {
+            // Data is accessible - show category section, hide login section
+            if (categoryView) categoryView.classList.remove('hidden');
+            if (loginCardsSection) loginCardsSection.classList.add('hidden');
+        } else {
+            // Data is not accessible - hide category section, show login section
+            if (categoryView) categoryView.classList.add('hidden');
+            if (loginCardsSection) loginCardsSection.classList.remove('hidden');
+            // Generate login cards when data is not accessible
+            generateLoginCards();
+        }
+    }
+
+    // Combined function to fetch data and manage visibility
+    async function fetchDataAndManageVisibility() {
+        try {
+            await fetchData();
+            dataAccessible = true;
+            // Now render category cards after dataAccessible is set
+            if (allData.categories) {
+                renderCategoryCards(allData.categories);
+            }
+        } catch (error) {
+            console.warn("Data not accessible, showing login cards:", error);
+            dataAccessible = false;
+        }
+        manageSectionVisibility();
+    }
 
     const categoryIcons = {
         "primary production": "eco",
@@ -336,6 +367,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Generic function to create category cards using Mustache templates
     function createCategoryCard(categoryName, activities) {
+        // Only create category cards if data is accessible
+        if (!dataAccessible) {
+            console.warn("Cannot create category card: data not accessible");
+            return null;
+        }
+        
         // Prepare data for template
         const templateData = prepareCategoryCardData(categoryName, activities);
         
@@ -511,11 +548,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
             allData = await response.json();
-            renderCategoryCards(allData.categories);
+            // Don't render cards here - they will be rendered after dataAccessible is set
         } catch (error) {
             console.error("Could not fetch or parse data:", error);
-            const containerHelper = clearContainer(categoryCardsContainer, '');
-            categoryCardsContainer.innerHTML = '<p style="color: red; text-align: center;">Error loading data. Please try again later.</p>';
+            // Clear any existing category cards
+            if (categoryCardsContainer) {
+                categoryCardsContainer.innerHTML = '';
+            }
+            // Re-throw the error so it can be caught by fetchDataAndManageVisibility
+            throw error;
         }
     }
 
@@ -542,6 +583,12 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function renderCategoryCards(categories) {
+        // Only render category cards if data is accessible
+        if (!dataAccessible) {
+            console.warn("Cannot render category cards: data not accessible");
+            return;
+        }
+        
         const containerHelper = clearContainer(categoryCardsContainer, 'No categories found.');
         if (!categories) {
             containerHelper.showEmpty();
@@ -551,7 +598,9 @@ document.addEventListener('DOMContentLoaded', () => {
         for (const categoryName in categories) {
             const activities = categories[categoryName];
             const card = createCategoryCard(categoryName, activities);
-            categoryCardsContainer.appendChild(card);
+            if (card) { // Only append if card was created successfully
+                categoryCardsContainer.appendChild(card);
+            }
         }
     }
 
@@ -571,13 +620,23 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function showActivityView(categoryName, activities) {
+        // Only show activity view if data is accessible
+        if (!dataAccessible) {
+            console.warn("Cannot show activity view: data not accessible");
+            return;
+        }
+        
         const capitalizedCategoryName = capitalizeFirstWord(categoryName);
         activityViewTitle.textContent = `${capitalizedCategoryName} - Activities`;
         renderActivityCards(activities);
         categoryView.classList.add('hidden');
         activityView.classList.remove('hidden');
-        if (infoCardsSection) { // Added this block
+        if (infoCardsSection) {
             infoCardsSection.classList.add('hidden');
+        }
+        // Hide login section when showing activities
+        if (loginCardsSection) {
+            loginCardsSection.classList.add('hidden');
         }
         window.scrollTo(0, 0); // Scroll to top
         setFabState('category'); // Set FAB state to category
@@ -585,10 +644,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function showCategoryView() {
         activityView.classList.add('hidden');
-        categoryView.classList.remove('hidden');
-        if (infoCardsSection) { // Added this block
+        if (dataAccessible) {
+            categoryView.classList.remove('hidden');
+        }
+        if (infoCardsSection) {
             infoCardsSection.classList.remove('hidden');
         }
+        // Manage login section visibility based on data access
+        manageSectionVisibility();
         window.scrollTo(0, 0); // Scroll to top
         setFabState('home'); // Set FAB state to home
     }
