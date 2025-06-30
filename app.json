@@ -17,6 +17,10 @@
     "infoCard": {
       "template": "<h4 class=\"mt-0 mb-2 text-xl font-semibold text-primary-teal\">{{header}}</h4><p class=\"mb-0 text-base text-primary-teal\">{{content}}</p>{{#if footer}}<p class=\"text-sm text-primary-teal-light mt-2\">{{footer}}</p>{{/if}}",
       "className": "bg-white rounded-lg shadow-sm p-6 flex flex-col justify-start items-start text-left"
+    },
+    "loginCard": {
+      "template": "<div class=\"flex items-center mb-3\"><span class=\"material-icons-outlined mr-3 text-2xl text-primary-teal\">{{icon}}</span><h4 class=\"mt-0 mb-0 text-xl font-semibold text-primary-teal\">{{header}}</h4></div>{{#if image}}<div class=\"my-4 text-center\"><img src=\"{{image}}\" alt=\"{{imageAlt}}\" class=\"max-w-full h-auto mx-auto rounded\"></div>{{/if}}<p class=\"mb-3 text-base text-primary-teal leading-relaxed\">{{content}}</p>{{#if footer}}<div class=\"mt-4\">{{{footer}}}</div>{{/if}}",
+      "className": "bg-white rounded-lg shadow-sm p-6 flex flex-col justify-start items-start text-left"
     }
   },
   "splash": {
@@ -75,6 +79,30 @@
                     "header": "Visual Overview",
                     "content": "images/project-diagram.jpg",
                     "footer": "Project ecosystem diagram"
+                }
+            }
+        },
+        "login": {
+            "cards": {
+                "card1": {
+                    "icon": "warning",
+                    "header": "No access",
+                    "content": "Access to this application requires proper authentication. Please use the QR code to login through the ZeroW Data Space authentication system, or contact your system administrator for access credentials.",
+                    "footer": "<a href=\"https://www.zerow-project.eu/support/access-request\" target=\"_blank\" class=\"text-primary-teal font-medium hover:underline\">Request Access</a>"
+                },
+                "card2": {
+                    "icon": "login",
+                    "header": "Login",
+                    "content": "Scan the QR code below with your mobile device to authenticate through the ZeroW Data Space.",
+                    "image": "images/qr-code-placeholder.svg",
+                    "imageAlt": "QR Code for Authentication",
+                    "footer": "<a href=\"https://www.zerow-project.eu/data-spaces/auth\" target=\"_blank\" class=\"text-primary-teal font-medium hover:underline\">Alternative Login Method</a>"
+                },
+                "card3": {
+                    "icon": "info",
+                    "header": "Instructions",
+                    "content": "1. Scan the QR code with your smartphone or tablet. 2. Complete the authentication process in your browser. 3. Return to this application once authenticated. 4. Refresh this page to access the full functionality.",
+                    "footer": "<a href=\"https://www.zerow-project.eu/help/authentication\" target=\"_blank\" class=\"text-primary-teal font-medium hover:underline\">Need Help? View Full Instructions</a>"
                 }
             }
         },        

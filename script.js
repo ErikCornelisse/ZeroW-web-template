@@ -93,6 +93,8 @@ document.addEventListener('DOMContentLoaded', () => {
         fetchData();
         // Generate info cards if configured
         generateInfoCards();
+        // Generate login cards if configured
+        generateLoginCards();
     });
 
     const categoryIcons = {
@@ -164,6 +166,22 @@ document.addEventListener('DOMContentLoaded', () => {
             <p class="mb-0 text-base text-primary-teal">{{content}}</p>
             {{#hasFooter}}
             <p class="text-sm text-primary-teal-light mt-2">{{footer}}</p>
+            {{/hasFooter}}
+        `,
+        
+        loginCard: `
+            <div class="flex items-center mb-3">
+                <span class="material-icons-outlined mr-3 text-2xl text-primary-teal">{{icon}}</span>
+                <h4 class="mt-0 mb-0 text-xl font-semibold text-primary-teal">{{header}}</h4>
+            </div>
+            {{#hasImage}}
+            <div class="my-4 w-full flex justify-center items-center">
+                <img src="{{image}}" alt="{{imageAlt}}" class="max-w-48 max-h-48 h-auto rounded block mx-auto">
+            </div>
+            {{/hasImage}}
+            <p class="mb-3 text-base text-primary-teal leading-relaxed">{{content}}</p>
+            {{#hasFooter}}
+            <div class="mt-4">{{{footer}}}</div>
             {{/hasFooter}}
         `,
         
@@ -249,6 +267,20 @@ document.addEventListener('DOMContentLoaded', () => {
         return {
             header: cardConfig.header,
             content: cardConfig.content,
+            footer: cardConfig.footer || '',
+            hasFooter: !!cardConfig.footer
+        };
+    }
+
+    // Prepare data for login card template
+    function prepareLoginCardData(cardConfig) {
+        return {
+            icon: cardConfig.icon,
+            header: cardConfig.header,
+            content: cardConfig.content,
+            image: cardConfig.image || '',
+            imageAlt: cardConfig.imageAlt || '',
+            hasImage: !!cardConfig.image,
             footer: cardConfig.footer || '',
             hasFooter: !!cardConfig.footer
         };
@@ -376,6 +408,38 @@ document.addEventListener('DOMContentLoaded', () => {
             
             const card = createCard(className, cardContent);
             infoCardsGrid.appendChild(card);
+        });
+    }
+
+    function generateLoginCards() {
+        if (!appConfig.pages || !appConfig.pages.home || !appConfig.pages.home.content || !appConfig.pages.home.content.login) {
+            return;
+        }
+        
+        const loginCardsConfig = appConfig.pages.home.content.login.cards;
+        if (!loginCardsConfig) return;
+        
+        // Find the login cards container in the existing HTML
+        const loginCardsGrid = document.querySelector('#login-cards-section .grid');
+        if (!loginCardsGrid) return;
+        
+        // Clear existing cards
+        loginCardsGrid.innerHTML = '';
+        
+        // Generate cards from configuration
+        Object.keys(loginCardsConfig).forEach(cardKey => {
+            const cardConfig = loginCardsConfig[cardKey];
+            
+            // Prepare data for template
+            const templateData = prepareLoginCardData(cardConfig);
+            
+            // Render with Mustache
+            const cardContent = Mustache.render(MustacheTemplates.loginCard, templateData);
+            const className = (appConfig.templates && appConfig.templates.loginCard && appConfig.templates.loginCard.className) ||
+                'bg-white rounded-lg shadow-sm p-6 flex flex-col justify-start items-start text-left';
+            
+            const card = createCard(className, cardContent);
+            loginCardsGrid.appendChild(card);
         });
     }
 
