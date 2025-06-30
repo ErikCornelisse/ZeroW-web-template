@@ -16,8 +16,8 @@
     <link rel="apple-touch-icon" href="images/logos/project-logo-48.png"> <!-- Consider creating a dedicated apple-touch-icon -->
 </head>
 <body class="body-base">
-    <header class="bg-white px-8 py-4 shadow-card border-b-4 border-primary-teal-dark max-[480px]:px-4">
-        <div class="flex justify-between items-center flex-wrap max-w-6xl mx-auto px-[calc(0.5rem-5px)]">
+    <header class="bg-white py-4 shadow-card border-b-4 border-primary-teal-dark">
+        <div class="flex justify-between items-center flex-wrap max-w-6xl mx-auto px-8 max-[480px]:px-4">
             <div class="flex items-center"> <!-- Header left group -->
                 <img src="./images/logos/project-logo-48.png" alt="Chorizo Project Logo" id="logo" class="block w-12 h-12 mr-4 object-contain cursor-pointer max-[480px]:w-10 max-[480px]:h-10">
                 <h1 id="app-title" class="text-primary-teal m-0 text-3xl cursor-pointer max-[768px]:text-xl max-[480px]:text-xl max-[480px]:mt-2">CHORIZO Actions Explorer</h1>
@@ -34,21 +34,23 @@
         </div>
     </section>
 
-    <main class="flex-grow px-8 py-8 max-w-6xl w-full mx-auto box-border max-[480px]:px-4">
-        <section id="category-view">
-            <h2 class="text-primary-teal text-left mb-8">Categories</h2>
-            <div id="category-cards-container" class="grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))] gap-6">
-                <!-- Category cards will be injected here by JavaScript -->
-            </div>
-        </section>
+    <main class="flex-grow py-8 w-full">
+        <div class="max-w-6xl mx-auto px-8 max-[480px]:px-4">
+            <section id="category-view">
+                <h2 class="text-primary-teal text-left mb-8">Categories</h2>
+                <div id="category-cards-container" class="grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))] gap-6">
+                    <!-- Category cards will be injected here by JavaScript -->
+                </div>
+            </section>
 
-        <section id="activity-view" class="hidden">
-            <button id="back-to-categories-button" class="bg-button-gray text-white border-none px-6 py-3 rounded-lg cursor-pointer text-base mb-8 block transition-colors duration-300 hover:bg-button-gray-dark">← Back to Categories</button>
-            <h2 id="activity-view-title" class="text-primary-teal text-left mb-8">Category Activities</h2>
-            <div id="activity-cards-container" class="grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))] gap-6">
-                <!-- Activity cards will be injected here by JavaScript -->
-            </div>
-        </section>
+            <section id="activity-view" class="hidden">
+                <button id="back-to-categories-button" class="bg-button-gray text-white border-none px-6 py-3 rounded-lg cursor-pointer text-base mb-8 block transition-colors duration-300 hover:bg-button-gray-dark">← Back to Categories</button>
+                <h2 id="activity-view-title" class="text-primary-teal text-left mb-8">Category Activities</h2>
+                <div id="activity-cards-container" class="grid grid-cols-[repeat(auto-fit,minmax(300px,1fr))] gap-6">
+                    <!-- Activity cards will be injected here by JavaScript -->
+                </div>
+            </section>
+        </div>
     </main>
 
     <footer class="bg-footer text-footer-text text-center px-8 py-6 border-t-4 border-primary-teal-dark">
