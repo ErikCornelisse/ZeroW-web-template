@@ -6,6 +6,16 @@ document.addEventListener('DOMContentLoaded', () => {
     const activityViewTitle = document.getElementById('activity-view-title');
     const infoCardsSection = document.getElementById('info-cards-section'); // Added this line
 
+    // Generic function to clear container and handle empty states
+    function clearContainer(container, emptyMessage) {
+        container.innerHTML = '';
+        return {
+            showEmpty: () => {
+                container.innerHTML = `<p>${emptyMessage}</p>`;
+            }
+        };
+    }
+
     const chorizoModal = document.getElementById('about-modal');
     const zerowModal = document.getElementById('zerow-modal');
     const homeModal = document.getElementById('home-modal');
@@ -28,14 +38,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
             appConfig = await response.json();
-            
-            // Load templates from configuration
-            if (appConfig.templates) {
-                Object.keys(appConfig.templates).forEach(templateName => {
-                    const templateConfig = appConfig.templates[templateName];
-                    Templates.register(templateName, templateConfig.template);
-                });
-            }
             
             // Apply configuration to the page
             if (appConfig.pages && appConfig.pages.home && appConfig.pages.home.header) {
@@ -67,7 +69,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Generic function to update modal content dynamically
+    // Generic function to update modal content dynamically using Mustache templates
     function updateModal(modalName, modalConfig, modalElementId) {
         const modal = document.getElementById(modalElementId);
         if (!modal) {
@@ -75,75 +77,14 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        // The modal content is the direct child div, not a class-based selector
-        const modalContent = modal.querySelector('div.bg-off-white');
-        if (!modalContent) {
-            console.warn(`Modal content not found in modal '${modalName}'`);
-            return;
-        }
-
-        // Update modal logo/icon if specified
-        const modalLogo = modalContent.querySelector('img');
-        if (modalLogo && modalConfig.icon) {
-            // Check if icon is a URL/path (contains '/' or '.') or Material Icon name
-            if (modalConfig.icon.includes('/') || modalConfig.icon.includes('.')) {
-                // It's an image path
-                modalLogo.src = modalConfig.icon;
-                modalLogo.alt = getModalTitle(modalConfig) || `${modalName} Logo`;
-            } else {
-                // It's a Material Icon name - could be handled differently if needed
-                // For now, we'll keep the existing image but update alt text
-                modalLogo.alt = getModalTitle(modalConfig) || `${modalName} Icon`;
-            }
-        }
-
-        // Update modal title (flexible field handling)
-        const modalTitle = modalContent.querySelector('h2');
-        if (modalTitle) {
-            const titleText = getModalTitle(modalConfig);
-            if (titleText) {
-                modalTitle.textContent = titleText;
-            }
-        }
-
-        // Update modal content
-        const modalText = modalContent.querySelector('p');
-        if (modalText && modalConfig.content) {
-            modalText.textContent = modalConfig.content;
-        }
-
-        // Update modal footer link
-        const modalLink = modalContent.querySelector('a');
-        if (modalLink && modalConfig.footer) {
-            updateModalFooter(modalLink, modalConfig.footer);
-        }
-    }
-
-    // Helper function to get modal title from various possible fields
-    function getModalTitle(modalConfig) {
-        return modalConfig.title || modalConfig.header || null;
-    }
-
-    // Helper function to update modal footer (handles both HTML and plain text)
-    function updateModalFooter(modalLink, footerContent) {
-        if (footerContent.includes('<a')) {
-            // Parse HTML content
-            const tempDiv = document.createElement('div');
-            tempDiv.innerHTML = footerContent;
-            const linkElement = tempDiv.querySelector('a');
-            if (linkElement) {
-                modalLink.href = linkElement.href;
-                modalLink.textContent = linkElement.textContent;
-                modalLink.target = linkElement.target || '_blank';
-                // Copy CSS classes if specified
-                if (linkElement.className) {
-                    modalLink.className = linkElement.className;
-                }
-            }
-        } else {
-            // Plain text footer
-            modalLink.textContent = footerContent;
-        }
+        // Prepare data for Mustache template
+        const templateData = prepareModalData(modalConfig);
+        
+        // Render modal content with Mustache
+        const modalContent = Mustache.render(MustacheTemplates.modal, templateData);
+        
+        // Replace the modal content
+        modal.innerHTML = modalContent;
     }
 
     // Initialize app configuration
@@ -172,125 +113,177 @@ document.addEventListener('DOMContentLoaded', () => {
         return str.charAt(0).toUpperCase() + str.slice(1);
     }
 
-    // --- Template System ---
+    // --- Mustache.js Template System ---
     
-    // Simple template engine for HTML generation
-    const Templates = {
-        // Template registry
-        templates: {},
+    // Mustache templates (logic-less templates)
+    const MustacheTemplates = {
+        categoryCard: `
+            <h3 class="mt-0 flex items-center text-xl font-semibold">
+                <span class="material-icons-outlined mr-2 text-2xl">{{icon}}</span> 
+                {{title}}
+            </h3>
+            <p class="text-sm text-primary-teal-light mb-2">{{count}} activities</p>
+            <p class="text-base text-primary-teal leading-relaxed">{{description}}</p>
+        `,
         
-        // Register a template
-        register(name, template) {
-            this.templates[name] = template;
-        },
+        activityCard: `
+            <div class="flex items-center mb-3">
+                {{#hasHeaderIcon}}
+                <img src="{{headerIconSrc}}" alt="Favicon" class="w-5 h-5 mr-2 object-contain">
+                {{/hasHeaderIcon}}
+                <h4 class="text-lg font-medium text-gray-text-dark m-0">{{title}}</h4>
+            </div>
+            {{#hasDescription}}
+            <p class="text-sm text-gray-text-medium leading-relaxed mb-3">{{description}}</p>
+            {{/hasDescription}}
+            {{#hasTags}}
+            <div class="flex flex-wrap gap-2 mb-3">
+                {{#tags}}
+                <span class="inline-block bg-tag text-tag px-3 py-1 rounded-full text-xs">{{.}}</span>
+                {{/tags}}
+            </div>
+            {{/hasTags}}
+            {{{sourceHtml}}}
+        `,
         
-        // Register multiple templates from an object
-        registerAll(templatesObj) {
-            Object.keys(templatesObj).forEach(name => {
-                this.register(name, templatesObj[name]);
-            });
-        },
+        sourceLink: `
+            <div>
+                <a href="{{url}}" target="_blank" 
+                   class="text-xs text-primary-teal break-all no-underline font-normal hover:underline hover:text-primary-teal-dark">
+                   {{displayText}}
+                </a>
+            </div>
+        `,
         
-        // Render a template with data
-        render(name, data = {}) {
-            const template = this.templates[name];
-            if (!template) {
-                console.warn(`Template '${name}' not found`);
-                return '';
-            }
-            
-            // Simple template interpolation
-            return template.replace(/\{\{(.*?)\}\}/g, (match, key) => {
-                const keys = key.trim().split('.');
-                let value = data;
-                
-                for (const k of keys) {
-                    value = value && value[k] !== undefined ? value[k] : '';
-                }
-                
-                return value;
-            });
-        },
+        sourceText: `
+            <p class="text-xs text-primary-teal break-all">{{text}}</p>
+        `,
         
-        // Render template with conditional blocks and loops
-        renderWithConditions(name, data = {}) {
-            let html = this.render(name, data);
-            
-            // Handle conditional blocks {{#if condition}}...{{/if}}
-            html = html.replace(/\{\{#if\s+(\w+)\}\}(.*?)\{\{\/if\}\}/gs, (match, condition, content) => {
-                return data[condition] ? content : '';
-            });
-            
-            // Handle negative conditional blocks {{#if !condition}}...{{/if}}
-            html = html.replace(/\{\{#if\s+!(\w+)\}\}(.*?)\{\{\/if\}\}/gs, (match, condition, content) => {
-                return !data[condition] ? content : '';
-            });
-            
-            // Handle loops {{#each array}}...{{/each}}
-            html = html.replace(/\{\{#each\s+(\w+)\}\}(.*?)\{\{\/each\}\}/gs, (match, arrayName, itemTemplate) => {
-                const array = data[arrayName];
-                if (!Array.isArray(array)) return '';
-                
-                return array.map(item => {
-                    return itemTemplate.replace(/\{\{this\.(\w+)\}\}/g, (match, prop) => {
-                        return item[prop] || '';
-                    }).replace(/\{\{this\}\}/g, item);
-                }).join('');
-            });
-            
-            return html;
-        },
+        infoCard: `
+            <h4 class="mt-0 mb-2 text-xl font-semibold text-primary-teal">{{header}}</h4>
+            <p class="mb-0 text-base text-primary-teal">{{content}}</p>
+            {{#hasFooter}}
+            <p class="text-sm text-primary-teal-light mt-2">{{footer}}</p>
+            {{/hasFooter}}
+        `,
         
-        // Check if template exists
-        exists(name) {
-            return !!this.templates[name];
-        },
-        
-        // Get all registered template names
-        getTemplateNames() {
-            return Object.keys(this.templates);
-        }
+        modal: `
+            <div class="bg-off-white my-[10%] mx-auto p-6 border border-gray-medium w-4/5 max-w-2xl rounded-lg shadow-modal text-primary-teal relative">
+                <img src="{{iconSrc}}" alt="{{iconAlt}}" class="absolute top-6 left-6 w-10 h-10 object-contain">
+                <h2 class="text-primary-teal mt-0 pl-14 mb-4 leading-10">{{title}}</h2>
+                <p class="leading-relaxed mb-4 text-base text-black">{{content}}</p>
+                <a href="{{linkUrl}}" target="_blank" class="text-primary-teal no-underline font-normal text-base hover:underline">{{linkText}}</a>
+            </div>
+        `
     };
 
-    // Register card templates
-    Templates.register('categoryCard', `
-        <h3 class="mt-0 flex items-center text-xl font-semibold">
-            <span class="material-icons-outlined mr-2 text-2xl">{{icon}}</span> 
-            {{title}}
-        </h3>
-        <p class="text-sm text-primary-teal-light mb-2">{{count}} activities</p>
-        <p class="text-base text-primary-teal leading-relaxed">{{description}}</p>
-    `);
+    // --- Data Preparation Functions for Mustache Templates ---
+    
+    // Prepare data for category card template
+    function prepareCategoryCardData(categoryName, activities) {
+        const iconName = categoryIcons[categoryName.toLowerCase()] || categoryIcons["whole supply chain"];
+        const capitalizedCategoryName = capitalizeFirstWord(categoryName);
+        const description = getCategoryDescription(categoryName);
+        
+        return {
+            icon: iconName,
+            title: capitalizedCategoryName,
+            count: activities.length,
+            description: description
+        };
+    }
 
-    Templates.register('activityCard', `
-        <div class="flex items-center mb-3">
-            {{headerIcon}}
-            <h4 class="text-lg font-medium text-gray-text-dark m-0">{{title}}</h4>
-        </div>
-        {{#if description}}
-        <p class="text-sm text-gray-text-medium leading-relaxed mb-3">{{description}}</p>
-        {{/if}}
-        {{#if tags}}
-        <div class="flex flex-wrap gap-2 mb-3">
-            {{#each tags}}
-            <span class="inline-block bg-tag text-tag px-3 py-1 rounded-full text-xs">{{this}}</span>
-            {{/each}}
-        </div>
-        {{/if}}
-        {{sourceDisplay}}
-    `);
+    // Prepare data for activity card template
+    function prepareActivityCardData(activity) {
+        const title = activity.action || 'N/A';
+        const capitalizedTitle = capitalizeFirstWord(title);
+        const goals = activity['goals/objectives'] || 'No description available.';
+        
+        // Avoid duplication: if goals/objectives is the same as action, use empty description
+        const description = (goals && goals.toLowerCase() !== title.toLowerCase()) ? goals : '';
+        
+        // Prepare header icon data
+        const hasHeaderIcon = !!(activity.favicon && activity.favicon.startsWith('images/logos/'));
+        const headerIconSrc = hasHeaderIcon ? activity.favicon : '';
+        
+        // Prepare tags array
+        const tags = [];
+        if (activity.duration) tags.push(activity.duration);
+        if (activity.country) tags.push(activity.country);
+        if (activity['role of the action']) tags.push(activity['role of the action']);
+        
+        // Prepare source display
+        const sourceHtml = prepareSourceDisplay(activity.source);
+        
+        return {
+            title: capitalizedTitle,
+            description: description,
+            hasDescription: !!description,
+            hasHeaderIcon: hasHeaderIcon,
+            headerIconSrc: headerIconSrc,
+            tags: tags,
+            hasTags: tags.length > 0,
+            sourceHtml: sourceHtml
+        };
+    }
 
-    Templates.register('tag', `
-        <span class="inline-block bg-tag text-tag px-3 py-1 rounded-full text-xs {{additionalClasses}}">{{text}}</span>
-    `);
+    // Prepare source display HTML
+    function prepareSourceDisplay(source) {
+        if (!source) {
+            return Mustache.render(MustacheTemplates.sourceText, { text: 'N/A' });
+        }
+        
+        if (source.startsWith('http') || source.startsWith('www')) {
+            const displayUrl = source.length > 100 ? source.substring(0, 97) + '...' : source;
+            return Mustache.render(MustacheTemplates.sourceLink, { 
+                url: source, 
+                displayText: displayUrl 
+            });
+        } else {
+            return Mustache.render(MustacheTemplates.sourceText, { text: source });
+        }
+    }
 
-    Templates.register('sourceLink', `
-        <div><a href="{{url}}" target="_blank" class="text-xs text-primary-teal break-all no-underline font-normal hover:underline hover:text-primary-teal-dark">{{displayText}}</a></div>
-    `);
+    // Prepare data for info card template  
+    function prepareInfoCardData(cardConfig) {
+        return {
+            header: cardConfig.header,
+            content: cardConfig.content,
+            footer: cardConfig.footer || '',
+            hasFooter: !!cardConfig.footer
+        };
+    }
 
-    Templates.register('sourceText', `
-        <p class="text-xs text-primary-teal break-all">{{text}}</p>
-    `);
+    // Prepare data for modal template
+    function prepareModalData(modalConfig) {
+        // Handle footer content - extract URL and text from HTML if present
+        let linkUrl = '#';
+        let linkText = 'Learn more';
+        
+        if (modalConfig.footer) {
+            if (modalConfig.footer.includes('<a')) {
+                // Parse HTML footer to extract href and text
+                const tempDiv = document.createElement('div');
+                tempDiv.innerHTML = modalConfig.footer;
+                const linkElement = tempDiv.querySelector('a');
+                if (linkElement) {
+                    linkUrl = linkElement.href;
+                    linkText = linkElement.textContent;
+                }
+            } else {
+                linkText = modalConfig.footer;
+            }
+        }
+        
+        return {
+            iconSrc: modalConfig.icon || '',
+            iconAlt: `${modalConfig.title || modalConfig.header || 'Modal'} Logo`,
+            title: modalConfig.title || modalConfig.header || '',
+            content: modalConfig.content || '',
+            linkUrl: linkUrl,
+            linkText: linkText
+        };
+    }
 
     // --- Reusable Card Creation Functions ---
     
@@ -304,47 +297,18 @@ document.addEventListener('DOMContentLoaded', () => {
         return card;
     }
 
-    // Generic function to clear container and handle empty states
-    function clearContainer(container, emptyMessage) {
-        container.innerHTML = '';
-        return {
-            showEmpty: () => {
-                container.innerHTML = `<p>${emptyMessage}</p>`;
-            }
-        };
-    }
-
-    // Create source link or text display using templates
+    // Create source link or text display using Mustache templates
     function createSourceDisplay(source) {
-        if (!source) {
-            return Templates.render('sourceText', { text: 'N/A' });
-        }
-        
-        if (source.startsWith('http') || source.startsWith('www')) {
-            const displayUrl = source.length > 100 ? source.substring(0, 97) + '...' : source;
-            return Templates.render('sourceLink', { 
-                url: source, 
-                displayText: displayUrl 
-            });
-        } else {
-            return Templates.render('sourceText', { text: source });
-        }
+        return prepareSourceDisplay(source);
     }
 
-    // Generic function to create category cards using templates
+    // Generic function to create category cards using Mustache templates
     function createCategoryCard(categoryName, activities) {
-        const iconName = categoryIcons[categoryName.toLowerCase()] || categoryIcons["whole supply chain"];
-        const capitalizedCategoryName = capitalizeFirstWord(categoryName);
-        const description = getCategoryDescription(categoryName);
+        // Prepare data for template
+        const templateData = prepareCategoryCardData(categoryName, activities);
         
-        const templateData = {
-            icon: iconName,
-            title: capitalizedCategoryName,
-            count: activities.length,
-            description: description
-        };
-        
-        const cardContent = Templates.render('categoryCard', templateData);
+        // Render with Mustache
+        const cardContent = Mustache.render(MustacheTemplates.categoryCard, templateData);
         
         // Use className from config if available, otherwise fallback to default
         const className = (appConfig.templates && appConfig.templates.categoryCard && appConfig.templates.categoryCard.className) ||
@@ -355,38 +319,15 @@ document.addEventListener('DOMContentLoaded', () => {
         return card;
     }
 
-    // Generic function to create activity cards using templates
+    // Generic function to create activity cards using Mustache templates
     function createActivityCard(activity) {
         if (Object.keys(activity).length === 0) return null;
 
-        const title = activity.action || 'N/A';
-        const capitalizedTitle = capitalizeFirstWord(title);
-        const goals = activity['goals/objectives'] || 'No description available.';
+        // Prepare data for template
+        const templateData = prepareActivityCardData(activity);
         
-        // Avoid duplication: if goals/objectives is the same as action, use empty description
-        const description = (goals && goals.toLowerCase() !== title.toLowerCase()) ? goals : '';
-        
-        // Create header icon
-        let headerIcon = '';
-        if (activity.favicon && activity.favicon.startsWith('images/logos/')) {
-            headerIcon = `<img src="${activity.favicon}" alt="Favicon" class="w-5 h-5 mr-2 object-contain">`;
-        }
-        
-        // Create tags array
-        const tags = [];
-        if (activity.duration) tags.push(activity.duration);
-        if (activity.country) tags.push(activity.country);
-        if (activity['role of the action']) tags.push(activity['role of the action']);
-        
-        const templateData = {
-            title: capitalizedTitle,
-            description: description,
-            headerIcon: headerIcon,
-            tags: tags.length > 0 ? tags : null,
-            sourceDisplay: createSourceDisplay(activity.source)
-        };
-        
-        const cardContent = Templates.renderWithConditions('activityCard', templateData);
+        // Render with Mustache
+        const cardContent = Mustache.render(MustacheTemplates.activityCard, templateData);
         
         // Use className from config if available, otherwise fallback to default
         const className = (appConfig.templates && appConfig.templates.activityCard && appConfig.templates.activityCard.className) ||
@@ -425,13 +366,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
             
-            const templateData = {
-                header: cardConfig.header,
-                content: cardConfig.content,
-                footer: cardConfig.footer || null
-            };
+            // Prepare data for template
+            const templateData = prepareInfoCardData(cardConfig);
             
-            const cardContent = Templates.renderWithConditions('infoCard', templateData);
+            // Render with Mustache
+            const cardContent = Mustache.render(MustacheTemplates.infoCard, templateData);
             const className = (appConfig.templates && appConfig.templates.infoCard && appConfig.templates.infoCard.className) ||
                 'bg-white rounded-lg shadow-sm p-6 flex flex-col justify-center items-start text-left';
             

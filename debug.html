@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Debug - Mustache.js Test</title>
+    <script src="https://cdn.jsdelivr.net/npm/mustache@4.2.0/mustache.min.js"></script>
+</head>
+<body>
+    <h1>Mustache.js Debug Test</h1>
+    <div id="output"></div>
+    <div id="console-output"></div>
+    
+    <script>
+        console.log('Mustache object:', typeof Mustache, Mustache);
+        
+        // Test basic Mustache functionality
+        const template = '<h2>{{title}}</h2><p>{{description}}</p>';
+        const data = {
+            title: 'Test Title',
+            description: 'Test Description'
+        };
+        
+        try {
+            const rendered = Mustache.render(template, data);
+            document.getElementById('output').innerHTML = rendered;
+            console.log('Mustache render successful:', rendered);
+        } catch (error) {
+            console.error('Mustache render error:', error);
+            document.getElementById('console-output').innerHTML = '<p style="color: red;">Error: ' + error.message + '</p>';
+        }
+        
+        // Test with array and sections
+        const advancedTemplate = `
+            <h3>{{title}}</h3>
+            {{#hasTags}}
+            <div>
+                {{#tags}}
+                <span>{{.}}</span>
+                {{/tags}}
+            </div>
+            {{/hasTags}}
+        `;
+        
+        const advancedData = {
+            title: 'Advanced Test',
+            tags: ['tag1', 'tag2', 'tag3'],
+            hasTags: true
+        };
+        
+        try {
+            const advancedRendered = Mustache.render(advancedTemplate, advancedData);
+            document.getElementById('output').innerHTML += advancedRendered;
+            console.log('Advanced Mustache render successful:', advancedRendered);
+        } catch (error) {
+            console.error('Advanced Mustache render error:', error);
+            document.getElementById('console-output').innerHTML += '<p style="color: red;">Advanced Error: ' + error.message + '</p>';
+        }
+    </script>
+</body>
+</html>

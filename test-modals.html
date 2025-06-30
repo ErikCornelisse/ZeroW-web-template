@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modal Test - Mustache.js</title>
+    <script src="https://cdn.jsdelivr.net/npm/mustache@4.2.0/mustache.min.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .modal { border: 1px solid #ddd; padding: 20px; margin: 10px 0; border-radius: 8px; background: #f9f9f9; }
+        .modal img { width: 40px; height: 40px; margin-right: 10px; }
+        .modal h2 { color: #2c5282; margin: 0 0 15px 0; }
+        .modal p { margin: 10px 0; }
+        .modal a { color: #2c5282; text-decoration: none; }
+        .modal a:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <h1>Modal Template Test with Mustache.js</h1>
+    <div id="modal-output"></div>
+    
+    <script>
+        // Modal template
+        const modalTemplate = `
+            <div class="modal">
+                <img src="{{iconSrc}}" alt="{{iconAlt}}">
+                <h2>{{title}}</h2>
+                <p>{{content}}</p>
+                <a href="{{linkUrl}}" target="_blank">{{linkText}}</a>
+            </div>
+        `;
+        
+        // Test data from app.json structure
+        const modalConfigs = {
+            about: {
+                icon: "images/logos/data.chorizoproject.eu_favicon.png",
+                title: "About the Chorizo project",
+                content: "The Chorizo Project Food Loss and Waste (FLW) Datahub serves as a central platform for storing and sharing datasets and insights on food loss and waste across the EU.",
+                footer: '<a href="https://data.chorizoproject.eu/" target="_blank">Visit Chorizo Project Datahub</a>'
+            },
+            zerow: {
+                icon: "images/logos/www.zerow-project.eu_favicon.png",
+                title: "About ZeroW",
+                content: "ZeroW addresses the need to move from today's fragmented solutions to synergised solutions based on shared data and collective intelligence.",
+                footer: '<a href="https://www.zerow-project.eu/data-spaces" target="_blank">Learn more about ZeroW Data Spaces</a>'
+            },
+            home: {
+                icon: "images/logos/www.zerow-project.eu_favicon.png",
+                header: "Return to base",
+                content: "You are about to leave the Chorizo Actions Explorer. Click the link below to go to the ZeroW Data Space.",
+                footer: '<a href="https://www.zerow-project.eu/data-spaces" target="_blank">Goto ZeroW Data Space</a>'
+            }
+        };
+        
+        // Data preparation function
+        function prepareModalData(modalConfig) {
+            // Handle footer content - extract URL and text from HTML if present
+            let linkUrl = '#';
+            let linkText = 'Learn more';
+            
+            if (modalConfig.footer) {
+                if (modalConfig.footer.includes('<a')) {
+                    // Parse HTML footer to extract href and text
+                    const tempDiv = document.createElement('div');
+                    tempDiv.innerHTML = modalConfig.footer;
+                    const linkElement = tempDiv.querySelector('a');
+                    if (linkElement) {
+                        linkUrl = linkElement.href;
+                        linkText = linkElement.textContent;
+                    }
+                } else {
+                    linkText = modalConfig.footer;
+                }
+            }
+            
+            return {
+                iconSrc: modalConfig.icon || '',
+                iconAlt: `${modalConfig.title || modalConfig.header || 'Modal'} Logo`,
+                title: modalConfig.title || modalConfig.header || '',
+                content: modalConfig.content || '',
+                linkUrl: linkUrl,
+                linkText: linkText
+            };
+        }
+        
+        // Test all modals
+        const output = document.getElementById('modal-output');
+        let html = '';
+        
+        Object.keys(modalConfigs).forEach(modalName => {
+            const modalConfig = modalConfigs[modalName];
+            const templateData = prepareModalData(modalConfig);
+            
+            try {
+                const modalHtml = Mustache.render(modalTemplate, templateData);
+                html += `<h3>Modal: ${modalName}</h3>` + modalHtml;
+                console.log(`${modalName} modal rendered successfully`);
+            } catch (error) {
+                console.error(`Error rendering ${modalName} modal:`, error);
+                html += `<p style="color: red;">Error rendering ${modalName} modal: ${error.message}</p>`;
+            }
+        });
+        
+        output.innerHTML = html;
+    </script>
+</body>
+</html>

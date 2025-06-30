@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mustache Migration Test</title>
+    <script src="https://cdn.jsdelivr.net/npm/mustache@4.2.0/mustache.min.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .card { border: 1px solid #ddd; padding: 20px; margin: 10px 0; border-radius: 8px; }
+        .tag { background: #e0e7ff; color: #3730a3; padding: 4px 8px; border-radius: 12px; font-size: 12px; margin: 2px; }
+    </style>
+</head>
+<body>
+    <h1>Mustache Migration Test</h1>
+    <div id="category-output"></div>
+    <div id="activity-output"></div>
+    <div id="debug-output"></div>
+    
+    <script>
+        console.log('Testing Mustache.js implementation...');
+        
+        // Copy the templates from our implementation
+        const MustacheTemplates = {
+            categoryCard: `
+                <h3 class="mt-0 flex items-center text-xl font-semibold">
+                    <span class="material-icons-outlined mr-2 text-2xl">{{icon}}</span> 
+                    {{title}}
+                </h3>
+                <p class="text-sm text-primary-teal-light mb-2">{{count}} activities</p>
+                <p class="text-base text-primary-teal leading-relaxed">{{description}}</p>
+            `,
+            
+            activityCard: `
+                <div class="flex items-center mb-3">
+                    {{#hasHeaderIcon}}
+                    <img src="{{headerIconSrc}}" alt="Favicon" class="w-5 h-5 mr-2 object-contain">
+                    {{/hasHeaderIcon}}
+                    <h4 class="text-lg font-medium text-gray-text-dark m-0">{{title}}</h4>
+                </div>
+                {{#hasDescription}}
+                <p class="text-sm text-gray-text-medium leading-relaxed mb-3">{{description}}</p>
+                {{/hasDescription}}
+                {{#hasTags}}
+                <div class="flex flex-wrap gap-2 mb-3">
+                    {{#tags}}
+                    <span class="tag">{{.}}</span>
+                    {{/tags}}
+                </div>
+                {{/hasTags}}
+                {{{sourceHtml}}}
+            `,
+            
+            sourceLink: `
+                <div>
+                    <a href="{{url}}" target="_blank">{{displayText}}</a>
+                </div>
+            `,
+            
+            sourceText: `
+                <p>{{text}}</p>
+            `
+        };
+        
+        // Copy the data preparation functions
+        function prepareCategoryCardData(categoryName, activityCount) {
+            return {
+                icon: 'eco',
+                title: categoryName,
+                count: activityCount,
+                description: `A collection of activities related to ${categoryName}.`
+            };
+        }
+        
+        function prepareActivityCardData(activity) {
+            const sourceHtml = activity.source ? 
+                (activity.source.startsWith('http') ? 
+                    Mustache.render(MustacheTemplates.sourceLink, { url: activity.source, displayText: activity.source }) :
+                    Mustache.render(MustacheTemplates.sourceText, { text: activity.source })
+                ) : 
+                Mustache.render(MustacheTemplates.sourceText, { text: 'N/A' });
+                
+            return {
+                title: activity.action || 'N/A',
+                description: activity['goals/objectives'] || '',
+                hasDescription: !!(activity['goals/objectives']),
+                hasHeaderIcon: false,
+                headerIconSrc: '',
+                tags: activity.country ? [activity.country] : [],
+                hasTags: !!(activity.country),
+                sourceHtml: sourceHtml
+            };
+        }
+        
+        // Test category card
+        try {
+            const categoryData = prepareCategoryCardData('Primary Production', 5);
+            const categoryHtml = Mustache.render(MustacheTemplates.categoryCard, categoryData);
+            document.getElementById('category-output').innerHTML = `
+                <h2>Category Card Test</h2>
+                <div class="card">${categoryHtml}</div>
+            `;
+            console.log('Category card test: SUCCESS');
+        } catch (error) {
+            console.error('Category card test: ERROR', error);
+            document.getElementById('debug-output').innerHTML += `<p style="color: red;">Category Error: ${error.message}</p>`;
+        }
+        
+        // Test activity card
+        try {
+            const activityData = prepareActivityCardData({
+                action: 'Test Action',
+                'goals/objectives': 'This is a test activity to verify Mustache rendering.',
+                source: 'https://example.com/test',
+                country: 'Ireland'
+            });
+            const activityHtml = Mustache.render(MustacheTemplates.activityCard, activityData);
+            document.getElementById('activity-output').innerHTML = `
+                <h2>Activity Card Test</h2>
+                <div class="card">${activityHtml}</div>
+            `;
+            console.log('Activity card test: SUCCESS');
+        } catch (error) {
+            console.error('Activity card test: ERROR', error);
+            document.getElementById('debug-output').innerHTML += `<p style="color: red;">Activity Error: ${error.message}</p>`;
+        }
+        
+        console.log('Test completed');
+    </script>
+</body>
+</html>
